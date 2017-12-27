@@ -1,24 +1,23 @@
+import GraphQLDate from 'graphql-date';
 import query from './query';
 import mutation from './mutation';
-import GraphQLDate from 'graphql-date';
 
-const resolvers = () => {
-  return {
-    Query: query,
 
-    Mutation: mutation,
+const resolvers = () => ({
+  Query: query,
 
-    Event: {
-      users (event) {
-        event.getUsers();
-      },
-      room (event) {
-        event.getRoom();
-      }
+  Mutation: mutation,
+
+  Event: {
+    users(event) {
+      event.getUsers();
     },
+    room(event) {
+      event.getRoom();
+    },
+  },
 
-    Date: GraphQLDate
-  };
-};
+  Date: GraphQLDate,
+});
 
 export default resolvers;

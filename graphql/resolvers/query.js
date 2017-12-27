@@ -1,24 +1,24 @@
 import { models } from '../../models';
 
 const quiries = {
-event (root, { id }) {
+  event(root, { id }) {
     return models.Event.findById(id);
   },
-  events (root, args, context) {
+  events(root, args, context) {
     return models.Event.findAll(argumets, context);
   },
-user (root, { id }) {
+  user(root, { id }) {
     return models.User.findById(id);
   },
-  users (root, args, context) {
+  users(root, args, context) {
     return models.User.findAll({}, context);
   },
-room (root, { id }) {
+  room(root, { id }) {
     return models.Room.findById(id);
   },
-  rooms (root, args, context) {
+  rooms(root, args, context) {
     return models.Room.findAll({ offset: 1 }, context);
-  }
+  },
 };
 
 export default quiries;

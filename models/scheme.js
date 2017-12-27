@@ -4,19 +4,19 @@ const scheme = (sequelize) => {
   const User = sequelize.define('User', {
     login: Sequelize.STRING,
     homeFloor: Sequelize.TINYINT,
-    avatarUrl: Sequelize.STRING
+    avatarUrl: Sequelize.STRING,
   });
 
   const Room = sequelize.define('Room', {
     title: Sequelize.STRING,
     capacity: Sequelize.SMALLINT,
-    floor: Sequelize.TINYINT
+    floor: Sequelize.TINYINT,
   });
 
   const Event = sequelize.define('Event', {
     title: Sequelize.STRING,
     dateStart: Sequelize.DATE,
-    dateEnd: Sequelize.DATE
+    dateEnd: Sequelize.DATE,
   });
 
   Event.belongsToMany(User, { through: 'Events_Users' });
@@ -24,7 +24,7 @@ const scheme = (sequelize) => {
   Event.belongsTo(Room);
 
   return {
-    Room, Event, User
+    Room, Event, User,
   };
 };
 

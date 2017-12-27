@@ -1,7 +1,7 @@
-import typeDefs from './typeDefs';
-import resolvers from './resolvers';
 import graphqlHTTP from 'express-graphql';
 import { makeExecutableSchema } from 'graphql-tools';
+import typeDefs from './typeDefs';
+import resolvers from './resolvers';
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -9,7 +9,7 @@ const schema = makeExecutableSchema({
 });
 
 const router = graphqlHTTP({
-  schema: schema,
+  schema,
   graphiql: true,
 });
 

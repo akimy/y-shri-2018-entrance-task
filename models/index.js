@@ -1,5 +1,6 @@
-import scheme from './scheme';
 import Sequelize, { Op } from 'sequelize';
+import scheme from './scheme';
+
 
 const sequelize = new Sequelize(null, null, null, {
   host: 'localhost',
