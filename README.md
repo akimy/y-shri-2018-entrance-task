@@ -1,2 +1,3 @@
-# y-shri-2018-entrance-task
-Speech rooms distribution app.
+## Яндекс переговорки
+# Тестовое задание для вступления в школу разработки интерфейсов Yandex 2018
+
