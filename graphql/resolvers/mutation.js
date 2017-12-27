@@ -8,7 +8,7 @@ const mutations = {
 
   updateUser(root, { id, input }, context) {
     return models.User.findById(id)
-      .then((user) => user.update(input));
+      .then(user => user.update(input));
   },
 
   removeUser(root, { id }, context) {
@@ -23,7 +23,7 @@ const mutations = {
 
   updateRoom(root, { id, input }, context) {
     return models.Room.findById(id)
-      .then((room) => room.update(input));
+      .then(room => room.update(input));
   },
 
   removeRoom(root, { id }, context) {
@@ -44,7 +44,7 @@ const mutations = {
 
   updateEvent(root, { id, input }, context) {
     return models.Event.findById(id)
-      .then((event) => event.update(input));
+      .then(event => event.update(input));
   },
 
   removeUserFromEvent(root, { id, userId }, context) {

@@ -5,7 +5,7 @@ const quiries = {
     return models.Event.findById(id);
   },
   events(root, args, context) {
-    return models.Event.findAll(argumets, context);
+    return models.Event.findAll(args, context);
   },
   user(root, { id }) {
     return models.User.findById(id);
