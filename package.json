@@ -10,13 +10,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "semistandard",
     "reset-db": "rm -f ./db.sqlite3 && node create-mock-data.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon --exec babel-node index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ArVaganov/y-shri-2018-entrance-task.git"
   },
-  "author": "Yandex corp., ArVaganov",
+  "author": "Yandex corp., Alexander Vaganov",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ArVaganov/y-shri-2018-entrance-task/issues"
@@ -32,6 +32,9 @@
     "sqlite3": "^3.1.9"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "nodemon": "^1.12.5",
     "semistandard": "^11.0.0"
   }

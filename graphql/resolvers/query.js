@@ -1,6 +1,6 @@
-const { models } = require('../../models');
+import { models } from '../../models';
 
-module.exports = {
+const quiries = {
 event (root, { id }) {
     return models.Event.findById(id);
   },
@@ -20,3 +20,5 @@ room (root, { id }) {
     return models.Room.findAll({ offset: 1 }, context);
   }
 };
+
+export default quiries;

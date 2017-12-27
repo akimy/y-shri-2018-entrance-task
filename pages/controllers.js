@@ -1,4 +1,4 @@
-module.exports.index = function (req, res) {
+const index = (req, res) => {
   res.send(`
     <html>
       <head>
@@ -7,5 +7,7 @@ module.exports.index = function (req, res) {
       </head>
       <h1>Hello</h1>
     </html>
-    `);
+  `);
 };
+
+export default index;

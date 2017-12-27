@@ -1,4 +1,4 @@
-module.exports = `
+const typeDefs = `
 scalar Date
 
 type User {
@@ -79,3 +79,5 @@ schema {
   mutation: Mutation
 }
 `;
+
+export default typeDefs;

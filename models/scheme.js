@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 
-module.exports = function (sequelize) {
+const scheme = (sequelize) => {
   const User = sequelize.define('User', {
     login: Sequelize.STRING,
     homeFloor: Sequelize.TINYINT,
@@ -27,3 +27,5 @@ module.exports = function (sequelize) {
     Room, Event, User
   };
 };
+
+export default scheme;

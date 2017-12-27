@@ -1,6 +1,6 @@
-const { models } = require('../../models');
+import { models } from '../../models';
 
-module.exports = {
+const mutations = {
   // User
   createUser (root, { input }, context) {
     return models.User.create(input);
@@ -73,3 +73,5 @@ module.exports = {
             .then(event => event.destroy());
   }
 };
+
+export default mutations;

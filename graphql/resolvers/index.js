@@ -1,9 +1,8 @@
-const GraphQLDate = require('graphql-date');
+import query from './query';
+import mutation from './mutation';
+import GraphQLDate from 'graphql-date';
 
-const query = require('./query');
-const mutation = require('./mutation');
-
-module.exports = function resolvers () {
+const resolvers = () => {
   return {
     Query: query,
 
@@ -21,3 +20,5 @@ module.exports = function resolvers () {
     Date: GraphQLDate
   };
 };
+
+export default resolvers;
