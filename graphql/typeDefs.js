@@ -6,6 +6,7 @@ type User {
     login: String!
     homeFloor: Int
     avatarUrl: String!
+    events: [Event]
 }
 
 input UserInput {

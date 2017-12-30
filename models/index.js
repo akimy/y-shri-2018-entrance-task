@@ -1,7 +1,7 @@
 import Sequelize, { Op } from 'sequelize';
 import scheme from './scheme';
 
-const sequelize = new Sequelize(null, null, null, {
+const sequelize = new Sequelize('db', null, null, {
   host: 'localhost',
   dialect: 'sqlite',
   storage: 'db.sqlite3',
