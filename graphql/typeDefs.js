@@ -12,6 +12,7 @@ type User {
 input UserInput {
     login: String!
     homeFloor: Int
+    avatarUrl: String
 }
 
 type UserRoom {
@@ -24,6 +25,7 @@ type Room {
     title: String!
     capacity: Int!
     floor: Int!
+    events: [Event]
 }
 
 input RoomInput {
