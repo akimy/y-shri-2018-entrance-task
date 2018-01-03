@@ -3,9 +3,11 @@ const index = (req, res) => {
     <html>
       <head>
         <title>Shri 2018</title>
-        <script src="/scripts/test.js"></script>
       </head>
-      <h1>Hello</h1>
+      <body>
+        <div id="app"></div>
+      </body>
+      <script src="bundle.js"></script>
     </html>
   `);
 };
