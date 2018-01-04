@@ -1,0 +1,17 @@
+@import '../../shared/styles';
+
+body {
+    color: $main;
+    p {
+        font-size: 15pt;
+        color: black;
+    }
+}
+
+.first {
+    font-family: 'HelveticaNeue';
+}
+
+.second {
+    font-family: 'HelveticaNeueBold';
+}

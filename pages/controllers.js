@@ -3,6 +3,7 @@ const index = (req, res) => {
     <html>
       <head>
         <title>Shri 2018</title>
+        <link rel="stylesheet" href="styles.css">
       </head>
       <body>
         <div id="app"></div>

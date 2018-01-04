@@ -1,84 +1,84 @@
 const { models, sequelize } = require('./models');
 
-function createData () {
-  let usersPromise = models.User.bulkCreate([
+function createData() {
+  const usersPromise = models.User.bulkCreate([
     {
       login: 'veged',
       avatarUrl: 'https://avatars3.githubusercontent.com/u/15365?s=460&v=4',
-      homeFloor: 0
+      homeFloor: 0,
     },
     {
       login: 'alt-j',
       avatarUrl: 'https://avatars1.githubusercontent.com/u/3763844?s=400&v=4',
-      homeFloor: 3
+      homeFloor: 3,
     },
     {
       login: 'yeti-or',
       avatarUrl: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
-      homeFloor: 2
-    }
+      homeFloor: 2,
+    },
   ]);
 
-  let roomsPromise = models.Room.bulkCreate([
+  const roomsPromise = models.Room.bulkCreate([
     {
       title: '404',
       capacity: 5,
-      floor: 4
+      floor: 4,
     },
     {
       title: 'Деньги',
       capacity: 4,
-      floor: 2
+      floor: 2,
     },
     {
       title: 'Карты',
       capacity: 4,
-      floor: 2
+      floor: 2,
     },
     {
       title: 'Ствола',
       capacity: 2,
-      floor: 2
+      floor: 2,
     },
     {
       title: '14',
       capacity: 6,
-      floor: 3
-    }
+      floor: 3,
+    },
   ]);
 
   const HOUR = 60 * 60 * 1000;
-  let now = new Date();
-  let oneHourLater = new Date(now.getTime() + HOUR);
-  let twoHoursLater = new Date(oneHourLater.getTime() + HOUR);
-  let threeHoursLater = new Date(twoHoursLater.getTime() + HOUR);
+  const now = new Date();
+  const oneHourLater = new Date(now.getTime() + HOUR);
+  const twoHoursLater = new Date(oneHourLater.getTime() + HOUR);
+  const threeHoursLater = new Date(twoHoursLater.getTime() + HOUR);
 
-  let eventsPromise = models.Event.bulkCreate([
+  const eventsPromise = models.Event.bulkCreate([
     {
       title: 'ШРИ 2018 - начало',
       dateStart: now,
-      dateEnd: oneHourLater
+      dateEnd: oneHourLater,
     },
     {
       title: '👾 Хакатон 👾',
       dateStart: oneHourLater,
-      dateEnd: twoHoursLater
+      dateEnd: twoHoursLater,
     },
     {
       title: '🍨 Пробуем kefir.js',
       dateStart: threeHoursLater,
-      dateEnd: twoHoursLater
-    }
+      dateEnd: twoHoursLater,
+    },
   ]);
 
   Promise.all([usersPromise, roomsPromise, eventsPromise])
     .then(() => Promise.all([
       models.User.findAll(),
       models.Room.findAll(),
-      models.Event.findAll()
+      models.Event.findAll(),
     ]))
-    .then(function ([users, rooms, events]) {
-      let promises = [];
+    .then(([users, rooms, events]) => {
+      const promises = [];
       promises.push(events[0].setRoom(rooms[0]));
       promises.push(events[1].setRoom(rooms[1]));
       promises.push(events[2].setRoom(rooms[2]));
