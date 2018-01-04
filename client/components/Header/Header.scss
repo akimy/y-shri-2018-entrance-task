@@ -1,0 +1,21 @@
+@import '../../shared/styles';
+
+.header {
+    background-color: #fff;
+    height: 71px;
+    box-shadow: 0 -1px 0 0 $faded;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+}
+
+.header__logo {
+    display: flex;
+    margin-left: 24.6px;
+}
+
+.header__button-container {
+    margin-left: auto;
+    margin-right: 36px;
+}

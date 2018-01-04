@@ -1,17 +1,9 @@
 @import '../../shared/styles';
 
-body {
-    color: $main;
-    p {
-        font-size: 15pt;
-        color: black;
-    }
-}
-
-.first {
-    font-family: 'HelveticaNeue';
-}
-
-.second {
-    font-family: 'HelveticaNeueBold';
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  padding: 0;
+  outline: 0;
 }

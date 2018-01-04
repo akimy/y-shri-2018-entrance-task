@@ -1,0 +1,47 @@
+@import '../../shared/styles';
+
+%button {
+    border-radius: 4px;
+    font-family: "HelveticaNeueMedium";
+    font-size: 13px;
+    letter-spacing: 0;
+    height: 36px;
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+.accept-button {
+    @extend %button;
+    background-color: $accept-normal;
+    color: white;
+    &:hover {
+        background-color: $accept-hover;
+    }
+    &:active {
+        background-color: $accept-pressed;
+    }
+    &_disabled {
+        @extend %button;
+        cursor: not-allowed;
+        background-color: $faded;
+        color: #babcbf;
+    }
+}
+
+.decline-button {
+    @extend %button;
+    background-color: $faded;
+    color: black;
+    &:hover {
+        background-color: $decline-hover;
+    }
+    &:active {
+        background-color: $decline-pressed;
+    }
+    &_disabled {
+        @extend %button;
+        cursor: not-allowed;
+        background-color: $decline-disabled;
+        color: #b4b7b9;
+    }
+}

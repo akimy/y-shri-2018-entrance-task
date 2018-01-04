@@ -1,7 +1,9 @@
 import express from 'express';
-import index from './controllers';
+import path from 'path';
 
 const router = express.Router();
-router.get('/', index);
+router.get('/', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/index.html`));
+});
 
 export default router;

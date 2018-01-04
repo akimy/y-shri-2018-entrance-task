@@ -7,6 +7,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   entry: './client/index.js',
   output: { path: `${__dirname}/public`, filename: 'bundle.js' },
+  resolve: {extensions: ['.js','.jsx']},
   watch: env === 'development',
   module: {
     loaders: [
@@ -29,7 +30,7 @@ module.exports = {
         test: /\.(png|svg|jpg|gif)$/,
         loader: 'file-loader',
         options: {
-          name: 'images/[hash].[ext]',
+          name: 'images/[name].[ext]',
         }
       },
       {       

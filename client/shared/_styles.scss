@@ -8,4 +8,15 @@
     src: url("../../shared/fonts/HelveticaNeueCyr-Bold.otf");
 }
 
-$main: #15ffe0;
+@font-face {
+	font-family: "HelveticaNeueMedium";
+    src: url("../../shared/fonts/HelveticaNeueCyr-Medium.otf");
+}
+
+$faded: #e9ecef;
+$accept-normal: #007dff;
+$accept-hover: #0058ff;
+$accept-pressed: #0011fe;
+$decline-hover: #dde0e3;
+$decline-pressed: #c7cdd3;
+$decline-disabled: #e2e5e8;
