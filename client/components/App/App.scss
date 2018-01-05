@@ -7,3 +7,13 @@
   padding: 0;
   outline: 0;
 }
+
+body, #app, main, html {
+  height: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}

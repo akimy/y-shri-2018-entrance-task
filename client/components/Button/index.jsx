@@ -3,16 +3,22 @@ import PropTypes from 'prop-types';
 import './Button.scss';
 
 const Button = ({ onClick, label, className }) => (
-  <button className={className} onClick={onClick}>
+  <button className={className} onClick={() => onClick.func(onClick.arg)}>
     {label}
   </button>
 );
 
 Button.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.shape({
+    func: PropTypes.func.isRequired,
+    arg: PropTypes.string.isRequired,
+  }),
   label: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
 };
 
-export default Button;
+Button.defaultProps = {
+  onClick: { func: () => {}, arg: '' },
+};
 
+export default Button;

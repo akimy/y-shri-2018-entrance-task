@@ -1,0 +1,52 @@
+@import '../../shared/styles';
+
+.create-meeting {
+    box-shadow: 0 -1px 0 0 $faded;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 71px);
+}
+
+.create-meeting__content-wrapper {
+    flex: 1 0 auto;
+}
+
+.create-meeting__content {
+    padding-top: 32px;
+    width: 880px;
+    margin: auto;
+}
+
+.meeting__label {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-family: 'HelveticaNeueBold', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+.meeting__clear-icon-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: $faded;
+    border-radius: 100px;
+    height: 24px;
+    width: 24px;
+    margin-left: auto;
+    cursor: pointer;
+    &:hover .meeting__clear-icon {
+        opacity: 1;
+    }
+}
+
+.meeting__clear-icon {
+    display: flex;
+    margin: auto;
+    opacity: 0.7;
+}
+
+.row_align-end {
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    margin-bottom: 24px;
+}

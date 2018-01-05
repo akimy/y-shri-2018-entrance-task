@@ -7,7 +7,7 @@
     "node": ">=8.4.0"
   },
   "scripts": {
-    "lint": "node_modules/.bin/eslint .",
+    "lint": "node_modules/.bin/eslint . --format codeframe",
     "test": "echo \"Error: no test specified\" && exit 1",
     "reset-db": "rm -f ./db.sqlite3 && babel-node create-mock-data.js",
     "server": "nodemon --exec babel-node index.js",
