@@ -1,0 +1,48 @@
+@import '../../shared/styles';
+
+.recommended-rooms {
+    display: flex;
+    flex-direction: column;
+}
+
+.recommended-rooms__label {
+    font-family: 'HelveticaNeueBold', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.recommended-rooms__tile {
+    display: flex;
+    height: 37px;
+    width: 420px;
+    color:black;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 4px;
+    background-color: $faded;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: 300ms cubic-bezier(0.03, 0.63, 0.24, 1.01);
+    &:hover {
+        background-color: $tile-hover;
+    }
+    &:active {
+        background-color: $tile-pressed;
+    }
+}
+
+.recommended-rooms__time {
+    display: flex;
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    margin-left: 10px;
+}
+
+.recommended-rooms__name-floor {
+    display: flex;
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin-left: 16px;
+    font-size: 13px;
+}

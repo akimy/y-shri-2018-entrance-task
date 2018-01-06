@@ -6,6 +6,7 @@
   border: 0;
   padding: 0;
   outline: 0;
+  background-color: transparent;
 }
 
 body, #app, main, html {
@@ -16,4 +17,20 @@ body, #app, main, html {
   display: flex;
   align-items: center;
   width: 100%;
+}
+
+.row_align-top {
+  display: flex;
+  align-items: top;
+  width: 100%;
+}
+
+.row_align-end {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+}
+
+hr {
+  display: none;
 }

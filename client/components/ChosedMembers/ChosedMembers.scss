@@ -1,0 +1,45 @@
+@import '../../shared/styles';
+
+.chosed-members {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 12px;
+}
+
+.chosed-members__container {
+    display: flex;
+    align-items: center;
+    height: 24px;
+    background-color: $faded;
+    border-radius: 16px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.chosed-members__avatar {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+.chosed-members__login {
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    margin: 0 8px;
+}
+
+.chosed-members__icon-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: $faded;
+    border-radius: 100px;
+    height: 24px;
+    width: 28px;
+    margin-left: auto;
+    cursor: pointer;
+    &:hover .meeting__clear-icon {
+        opacity: 1;
+    }
+}
