@@ -14,7 +14,7 @@
     @extend %button;
     background-color: $accept-normal;
     color: white;
-    &:hover {
+    &:hover, &:focus {
         background-color: $accept-hover;
     }
     &:active {
@@ -32,7 +32,7 @@
     @extend %button;
     background-color: $faded;
     color: black;
-    &:hover {
+    &:hover, &:focus {
         background-color: $decline-hover;
     }
     &:active {

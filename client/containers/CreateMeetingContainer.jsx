@@ -10,10 +10,25 @@ class CreateMeetingContainer extends Component {
       selectingMembers: false,
       selectedUsers: [],
       filteredUsers: [],
+      recommendedRooms: [
+        {
+          label: 'Поле непаханное',
+          floor: 3,
+          id: 2,
+        },
+        {
+          label: 'Тёмная башня',
+          floor: 5,
+          id: 3,
+        },
+      ],
+      selectedRoom: null,
       theme: '',
       userSearchInput: '',
     };
 
+    this.cancelSelectedRoom = this.cancelSelectedRoom.bind(this);
+    this.selectRoom = this.selectRoom.bind(this);
     this.handleFocusList = this.handleFocusList.bind(this);
     this.handleChangeTheme = this.handleChangeTheme.bind(this);
     this.addUserToSelected = this.addUserToSelected.bind(this);
@@ -50,7 +65,7 @@ class CreateMeetingContainer extends Component {
       users: [
         {
           login: 'Лекс Лютер',
-          avatarUrl: 'http://lostfilm.info/images/news/24693.jpg',
+          avatarUrl: 'https://vignette.wikia.nocookie.net/zlodei/images/0/03/5.jpg/revision/latest?cb=20140101124250&path-prefix=ru',
           floor: 7,
           id: 1,
         },
@@ -84,13 +99,19 @@ class CreateMeetingContainer extends Component {
           id: 6,
           floor: 4,
         },
+        {
+          login: 'Тор Одинович',
+          avatarUrl: 'https://s1.stabroeknews.com/images/2014/11/20141120chrishemsworth.jpg',
+          id: 7,
+          floor: 9,
+        },
       ],
     });
   }
 
   addUserToSelected(user) {
     this.setState(state => ({ selectedUsers: state.selectedUsers.concat([user]) }), () => {
-      this.setState({ selectingMembers: false });
+      this.setState({ selectingMembers: false, userSearchInput: '' });
     });
   }
 
@@ -101,7 +122,12 @@ class CreateMeetingContainer extends Component {
 
   filterUsers(value) {
     this.setState(() => ({ userSearchInput: value }), () => {
-      const filtered = this.state.users.filter(user => user.login.match(new RegExp(value, 'i'))).filter(el => this.state.selectedUsers.filter(selected => selected.id === el.id).length === 0);
+      const filtered = this.state.users
+        .filter(user => user.login.match(new RegExp(value, 'i')))
+        .filter(matched => this.state.selectedUsers
+          .filter(selected => selected.id === matched.id).length === 0)
+        .sort((a, b) => (a.login > b.login ? 1 : -1));
+
       this.setState({ filteredUsers: filtered });
     });
   }
@@ -111,7 +137,8 @@ class CreateMeetingContainer extends Component {
   }
 
   acceptCreating() {
-    console.info('accepting');
+    this.props.toggleModalCreated();
+    this.props.changeStageTo('workplace');
   }
 
   selectingMembersTurningOn() {
@@ -120,10 +147,7 @@ class CreateMeetingContainer extends Component {
   }
 
   selectingMembersTurningOff() {
-    // Evade blur event side effect i know this thing is not good, but currently dunno how to fix it
-    // setTimeout(() => {
-    //   this.setState({ selectingMembers: false });
-    // }, 100);
+    this.setState({ selectingMembers: false });
   }
 
   handleChangeTheme(value) {
@@ -132,6 +156,14 @@ class CreateMeetingContainer extends Component {
 
   handleFocusList() {
     this.listElement.firstChild.focus();
+  }
+
+  selectRoom(room) {
+    this.setState({ selectedRoom: room });
+  }
+
+  cancelSelectedRoom() {
+    this.setState({ selectedRoom: null });
   }
 
   render() {
@@ -148,6 +180,8 @@ class CreateMeetingContainer extends Component {
         removeUserFromSelected={this.removeUserFromSelected}
         handleChangeTheme={this.handleChangeTheme}
         handleFocusList={this.handleFocusList}
+        selectRoom={this.selectRoom}
+        cancelSelectedRoom={this.cancelSelectedRoom}
       />
     );
   }
@@ -155,6 +189,7 @@ class CreateMeetingContainer extends Component {
 
 CreateMeetingContainer.propTypes = {
   changeStageTo: PropTypes.func.isRequired,
+  toggleModalCreated: PropTypes.func.isRequired,
 };
 
 export default CreateMeetingContainer;

@@ -7,7 +7,7 @@ import Button from '../Button';
 const Header = props => (
   <header className="header">
     {/* eslint-disable */
-    // Image event interaction rule
+    // todo: image event interaction rule
     }
     <img
       className="header__logo"

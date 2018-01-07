@@ -11,11 +11,10 @@ const SelectMembersScroll = ({ members, addUserToSelected, ...props }) => {
       className="select-scroll__member-container"
       onClick={() => { addUserToSelected(member); }}
       onKeyDown={(e) => {
+        if (e.keyCode !== 9) e.preventDefault();
         if (e.keyCode === 40) {
-          e.preventDefault();
           e.target.nextSibling.focus();
         } else if (e.keyCode === 38) {
-          e.preventDefault();
           e.target.previousSibling.focus();
         } else if ((e.keyCode === 32) || (e.keyCode === 13)) {
           addUserToSelected(member);
@@ -30,9 +29,15 @@ const SelectMembersScroll = ({ members, addUserToSelected, ...props }) => {
   return (
     <div className="select-scroll" ref={props.listRef} >
       {membersJsx.length ? membersJsx :
-      <div className="select-scroll__member-container">
-        <div className="select-scroll__login" style={{ marginLeft: '15px' }}>
-          Все возможные участники в сборе. Намечается крупная вечеринка!
+      <div
+        role="button"
+        className="select-scroll__member-container"
+        onClick={() => props.selectingMembersTurningOff()}
+        tabIndex="0"
+        onKeyDown={() => props.selectingMembersTurningOff()}
+      >
+        <div className="select-scroll__none" style={{ marginLeft: '15px' }}>
+          Нет подходящих участников!
         </div>
       </div> }
     </div>
@@ -42,6 +47,8 @@ const SelectMembersScroll = ({ members, addUserToSelected, ...props }) => {
 SelectMembersScroll.propTypes = {
   members: PropTypes.arrayOf(PropTypes.object).isRequired,
   addUserToSelected: PropTypes.func.isRequired,
+  selectingMembersTurningOff: PropTypes.func.isRequired,
+  listRef: PropTypes.func.isRequired,
 };
 
 export default SelectMembersScroll;

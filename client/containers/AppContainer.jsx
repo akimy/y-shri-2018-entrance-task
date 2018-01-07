@@ -6,7 +6,7 @@ class AppContainer extends Component {
     super(props);
     this.state = {
       modalCreated: false,
-      stage: 'createMeeting',
+      stage: 'workplace',
     };
 
     this.toggleModalCreated = this.toggleModalCreated.bind(this);

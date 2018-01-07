@@ -39,7 +39,6 @@ const CreateMeeting = props => (
               handleFocusList={props.handleFocusList}
               value={props.userSearchInput}
               onFocus={props.selectingMembersTurningOn}
-              onBlur={props.selectingMembersTurningOff}
               onChange={props.filterUsers}
             />
 
@@ -48,18 +47,22 @@ const CreateMeeting = props => (
               members={props.filteredUsers}
               addUserToSelected={props.addUserToSelected}
               listRef={props.listRef}
+              selectingMembersTurningOff={props.selectingMembersTurningOff}
             />}
-
-            {!props.selectingMembers &&
             <ChosedMembers
               members={props.selectedUsers}
               removeUserFromSelected={props.removeUserFromSelected}
-            />}
-
+            />
           </div>
           <div className="column">
-            <RecommendedRooms rooms={props.rooms} />
-            <SelectedRoom label="Голубая лагуна" floor={4} />
+            { props.recommendedRooms.length !== 0 && !props.selectedRoom &&
+            <RecommendedRooms rooms={props.recommendedRooms} selectRoom={props.selectRoom} />}
+            { props.selectedRoom &&
+            <SelectedRoom
+              label={props.selectedRoom.label}
+              floor={props.selectedRoom.floor}
+              cancelSelectedRoom={props.cancelSelectedRoom}
+            /> }
           </div>
         </div>
       </div>
@@ -70,7 +73,14 @@ const CreateMeeting = props => (
 
 CreateMeeting.propTypes = {
   filteredUsers: PropTypes.arrayOf(PropTypes.object).isRequired,
-  rooms: PropTypes.arrayOf(PropTypes.object).isRequired,
+  recommendedRooms: PropTypes.arrayOf(PropTypes.any).isRequired,
+  selectedRoom: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    floor: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
+  }),
+  selectRoom: PropTypes.func.isRequired,
+  cancelSelectedRoom: PropTypes.func.isRequired,
   acceptCreating: PropTypes.func.isRequired,
   declineCreating: PropTypes.func.isRequired,
   selectingMembers: PropTypes.bool.isRequired,
@@ -82,12 +92,14 @@ CreateMeeting.propTypes = {
   theme: PropTypes.string.isRequired,
   handleChangeTheme: PropTypes.func.isRequired,
   removeUserFromSelected: PropTypes.func.isRequired,
-  userSearchInput: PropTypes.func.isRequired,
+  userSearchInput: PropTypes.string.isRequired,
   handleFocusList: PropTypes.func.isRequired,
+  listRef: PropTypes.func.isRequired,
 };
 
 CreateMeeting.defaultProps = {
   selectedUsers: [],
+  selectedRoom: null,
 };
 
 export default CreateMeeting;

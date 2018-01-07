@@ -4,7 +4,23 @@ import './RecommendedRooms.scss';
 
 const RecommendedRooms = (props) => {
   const roomsJsx = props.rooms.map(room => (
-    <div className="recommended-rooms__tile" key={room.id}>
+    <div
+      tabIndex="0"
+      role="button"
+      className="recommended-rooms__tile"
+      key={room.id}
+      onClick={() => props.selectRoom(room)}
+      onKeyDown={(e) => {
+        if (e.keyCode !== 9) e.preventDefault();
+        if (e.keyCode === 40) {
+          e.target.nextSibling.focus();
+        } else if (e.keyCode === 38) {
+          e.target.previousSibling.focus();
+        } else if ((e.keyCode === 32) || (e.keyCode === 13)) {
+          props.selectRoom(room);
+        }
+      }}
+    >
       <span className="recommended-rooms__time">16:00–16:30</span>
       <span className="recommended-rooms__name-floor">{`${room.label} ⸱ ${room.floor} этаж`}</span>
     </div>

@@ -16,7 +16,13 @@ const ChosedMembers = ({ members, ...props }) => {
           className="chosed-members__icon-wrapper"
           title={`Убрать пользователя ${user.login}`}
           onClick={() => props.removeUserFromSelected(user.id)}
-          onKeyPress={() => props.removeUserFromSelected(user.id)}
+          onKeyDown={(e) => {
+              if ((e.keyCode === 32) || (e.keyCode === 13)) {
+                e.preventDefault();
+                props.removeUserFromSelected(user.id);
+              }
+            }
+          }
         >
           <img className="meeting__clear-icon" src={CloseIcon} alt={`Убрать пользователя ${user.login}`} />
         </span>

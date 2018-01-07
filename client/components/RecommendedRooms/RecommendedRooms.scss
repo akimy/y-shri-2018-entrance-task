@@ -24,7 +24,7 @@
     margin-bottom: 8px;
     cursor: pointer;
     transition: 300ms cubic-bezier(0.03, 0.63, 0.24, 1.01);
-    &:hover {
+    &:hover, &:focus {
         background-color: $tile-hover;
     }
     &:active {
