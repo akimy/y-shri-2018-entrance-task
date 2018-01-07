@@ -3,7 +3,7 @@
     box-shadow: 0 -1px 0 0 $faded;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 71px);
+    flex: 1 0 auto;
 }
 
 .create-meeting__content-wrapper {
@@ -11,7 +11,7 @@
 }
 
 .create-meeting__content {
-    padding-top: 32px;
+    padding: 32px 0;
     width: 880px;
     margin: auto;
 }
