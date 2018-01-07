@@ -12,14 +12,25 @@ class CreateMeetingContainer extends Component {
       filteredUsers: [],
       recommendedRooms: [
         {
-          label: 'Поле непаханное',
-          floor: 3,
+          title: 'Поле непаханное',
+          floor: 2,
+          id: 1,
+          capacity: 8,
+        },
+        {
+          title: 'Голубая луна',
+          floor: 2,
           id: 2,
         },
         {
-          label: 'Тёмная башня',
-          floor: 5,
+          title: 'Темная пещера',
+          floor: 2,
           id: 3,
+        },
+        {
+          title: 'Тёмная башня',
+          floor: 5,
+          id: 4,
         },
       ],
       selectedRoom: null,
@@ -41,26 +52,6 @@ class CreateMeetingContainer extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      rooms: [
-        {
-          label: 'Готем',
-          floor: 1,
-          id: 1,
-        },
-        {
-          label: 'Поле непаханное',
-          floor: 3,
-          id: 2,
-        },
-        {
-          label: 'Тёмная башня',
-          floor: 5,
-          id: 3,
-        },
-      ],
-    });
-
     this.setState({
       users: [
         {

@@ -59,7 +59,7 @@ const CreateMeeting = props => (
             <RecommendedRooms rooms={props.recommendedRooms} selectRoom={props.selectRoom} />}
             { props.selectedRoom &&
             <SelectedRoom
-              label={props.selectedRoom.label}
+              title={props.selectedRoom.title}
               floor={props.selectedRoom.floor}
               cancelSelectedRoom={props.cancelSelectedRoom}
             /> }
@@ -75,7 +75,7 @@ CreateMeeting.propTypes = {
   filteredUsers: PropTypes.arrayOf(PropTypes.object).isRequired,
   recommendedRooms: PropTypes.arrayOf(PropTypes.any).isRequired,
   selectedRoom: PropTypes.shape({
-    label: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     floor: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
   }),

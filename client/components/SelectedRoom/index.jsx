@@ -10,7 +10,7 @@ const SelectedRoom = props => (
     </div>
     <div className="selected-room__tile">
       <span className="selected-room__time">16:00–16:30</span>
-      <span className="selected-room__name-floor">{`${props.label} ⸱ ${props.floor} этаж`}</span>
+      <span className="selected-room__name-floor">{`${props.title} ⸱ ${props.floor} этаж`}</span>
       <div
         role="button"
         tabIndex="0"
@@ -32,7 +32,7 @@ const SelectedRoom = props => (
 );
 
 SelectedRoom.propTypes = {
-  label: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   floor: PropTypes.number.isRequired,
   cancelSelectedRoom: PropTypes.func.isRequired,
 };

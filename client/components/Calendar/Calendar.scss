@@ -1,0 +1,40 @@
+@import '../../shared/styles';
+
+.calendar {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 0 0 #e9ecef;
+}
+// Ленинградская 67, п.1 - 16
+.calendar__icon-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: $faded;
+    border-radius: 100px;
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+    &:hover .calendar__icon {
+        opacity: 1;
+    }
+}
+
+.calendar__icon {
+    display: flex;
+    margin: auto;
+    opacity: 0.7;
+}
+
+.calendar__content {
+    display: flex;
+    margin: auto;
+    align-items: center;
+}
+
+.calendar__current-date-text {
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    margin: 0 12px;
+}

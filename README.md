@@ -8,7 +8,7 @@
 ```
 npm install
 npm run build - сборка продакшен версии интерфейса
-npm run server - запуск NodeJS (GraphQL API + HTML разметка)   
+npm run start - запуск NodeJS (GraphQL API + HTML разметка)   
 ```
 
 #### Запуск в режиме разработки
@@ -17,7 +17,7 @@ npm install
 npm run dev - запуск webpack сборщика в watch режиме.
 
 // Во второй консоли
-npm run server - запуск NodeJS (GraphQL API + HTML разметка)   
+npm run start - запуск NodeJS (GraphQL API + HTML разметка)   
 ```
 Запуск тестов
 ```

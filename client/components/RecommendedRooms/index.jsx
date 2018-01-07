@@ -22,7 +22,7 @@ const RecommendedRooms = (props) => {
       }}
     >
       <span className="recommended-rooms__time">16:00–16:30</span>
-      <span className="recommended-rooms__name-floor">{`${room.label} ⸱ ${room.floor} этаж`}</span>
+      <span className="recommended-rooms__name-floor">{`${room.title} ⸱ ${room.floor} этаж`}</span>
     </div>
   ));
 

@@ -1,0 +1,38 @@
+@import '../../shared/styles';
+
+.rooms-list {
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 62px);
+    box-shadow: inset -1px 0 0 0 #e9ecef;
+    align-items: left;
+    padding-left: 25px;
+}
+
+.floor {
+    padding-top: 20px;
+}
+
+.floor__number {
+    font-family: 'HelveticaNeueBold', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    color: $label-faded;
+    margin-bottom: 8px;
+}
+
+.floor__room-capacity {
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: black;
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.floor__room-title {
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: black;
+    margin-bottom: 2px;
+}

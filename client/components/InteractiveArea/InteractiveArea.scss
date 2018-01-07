@@ -1,0 +1,75 @@
+@import '../../shared/styles';
+
+.interactive-area {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+}
+
+.graph-container {
+    display: flex;
+    width: 1750px;
+    position: absolute;
+    height: 100%;
+}
+
+.graph {
+    width: 100%;
+}
+
+.timeline {
+    display: flex;
+    width: 1750px;
+    flex-direction: row;
+    align-items: center;
+    min-height: 46px;
+    box-shadow: 0 1px 0 0 #e9ecef;
+    user-select: none;
+    position: relative;
+    background-color: white;
+}
+
+.timeline__hour-label {
+    min-width: 70px;
+    text-align: center;
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    color: black;
+    font-weight: 500;
+    cursor: default;
+}
+
+.timeline__hour-label_faded {
+    @extend .timeline__hour-label;
+    color: $label-faded;
+}
+
+.timeline__current-badge-container {
+    position: absolute;
+    height: 20px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    border-radius: 100px;
+    z-index: 2;
+    background-color: $accept-normal;
+}
+
+.timeline__current-badge-text {
+    color: white;
+    font-size: 11px;
+    margin: 0 auto;
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+}
+
+.timeline__current-line {
+    stroke: $accept-normal;
+    stroke-width: 1;
+}
+
+.timeline__vertical-lines {
+    stroke: rgba(19,100,205,0.10);
+    stroke-width: 1;
+}
