@@ -1,0 +1,125 @@
+@import '../../shared/styles';
+
+.summary-dialog {
+    width: 338px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 16px 0 rgba(0, 44, 92, 0.28);
+    position: absolute;
+}
+
+.summary-dialog__span-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.summary-dialog__span {
+    width: 14px;
+    height: 30px;
+    fill: white;
+    max-height: 10px;
+    position: relative;
+    top: -10px;
+}
+
+.summary-dialog__polygon {
+    stroke: white;
+    stroke-width: 1px;
+    fill: white;
+}
+
+.summary-dialog__user-avatar {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-right: 8px;
+}
+
+.summary-dialog__users {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.summary-dialog__container {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0 16px 16px;
+}
+
+.summary-dialog__title {
+    @extend %font-preset;
+    font-weight: 500;
+    font-size: 15px;
+    color: black;
+    margin-bottom: 2px;
+}
+
+.summary-dialog__wrapper {
+    display: flex;
+}
+
+.summary-dialog__date {
+    @extend %font-preset;
+    font-size: 13px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.summary-dialog__user-login {
+    @extend %font-preset;
+    font-size: 13px;
+    color: black;
+    margin-right: 4px;
+}
+
+.summary-dialog__users-count {
+    @extend %font-preset;
+    font-size: 13px;
+    color: $label-faded;
+}
+
+.summary-dialog__icons-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+%icon-base {
+    display: flex;
+    align-items: center;
+    background-color: $faded;
+    border-radius: 100px;
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+}
+.summary-dialog__close-icon-wrapper {
+    @extend %icon-base;
+    margin-bottom: 4px;
+    &:hover .summary-dialog__close-icon {
+        opacity: 1;
+    }
+}
+
+.summary-dialog__edit-icon-wrapper {
+    @extend %icon-base;
+    &:hover .summary-dialog__edit-icon {
+        opacity: 0.5;
+    }
+}
+
+.summary-dialog__edit-icon {
+    display: flex;
+    margin: auto;
+    opacity: 0.3;
+}
+
+.summary-dialog__close-icon {
+    opacity: 0.7;
+    display: flex;
+    margin: auto;
+}

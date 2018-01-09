@@ -12,13 +12,14 @@ const Workplace = props => (
       <RoomsList floors={props.floors} />
     </div>
     <div className="workplace__right-column">
-      <InteractiveArea floors={props.floors} />
+      <InteractiveArea floors={props.floors} toggleSummaryDialog={props.toggleSummaryDialog} />
     </div>
   </section>
 );
 
 Workplace.propTypes = {
   floors: PropTypes.arrayOf(PropTypes.object),
+  toggleSummaryDialog: PropTypes.func.isRequired,
 };
 
 Workplace.defaultProps = {

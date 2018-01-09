@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import './InteractiveArea.scss';
 
 const calculateXCord = val => (((val * 60) * 7) / 6) + 34.5;
+const calculateXCordForEvent = dateStart =>
+  (((((new Date(dateStart)).getHours() * 60) +
+  ((new Date(dateStart)).getMinutes())) * 7) / 6) + 34.5;
 
-const InteractiveArea = ({ floors }) => {
+const InteractiveArea = ({ floors, ...props }) => {
   const currentDateTime = new Date();
   const [hour, min] = [currentDateTime.getHours(), currentDateTime.getMinutes()];
-  const leftMarginForCurrent = (((hour * 60) + min) * 7) / 6;
+  const leftMarginForCurrent = calculateXCordForEvent(currentDateTime) - 25;
 
   const timeLineElements = [...Array(25).keys()].map(val => (
     <div key={val} className={val > hour ? 'timeline__hour-label' : 'timeline__hour-label_faded'}>
@@ -26,9 +29,9 @@ const InteractiveArea = ({ floors }) => {
   ));
 
   const currentLine = (<line
-    x1={leftMarginForCurrent + 25}
+    x1={calculateXCordForEvent(currentDateTime)}
     y1="23"
-    x2={leftMarginForCurrent + 25}
+    x2={calculateXCordForEvent(currentDateTime)}
     y2="100%"
     className="timeline__current-line"
   />);
@@ -51,7 +54,25 @@ const InteractiveArea = ({ floors }) => {
           {previousRoomsCount += el.rooms.length}
           {el.rooms.map((room, j) => (
             <g key={room.id} transform={`translate(0, ${j * 49})`}>
-              <rect x="0" y="0" width="100%" height="28" fill="#fff" />
+              <rect x="0" y="0" width="100%" height="28" className="timeline__empty-track" />
+              {room.events.map((event) => {
+                let width = calculateXCordForEvent(event.dateEnd) - calculateXCordForEvent(event.dateStart);
+
+                // End of the day
+                if (width < 0) {
+                  width = calculateXCord(24) - calculateXCordForEvent(event.dateStart);
+                }
+                const startEventCord = calculateXCordForEvent(event.dateStart);
+                return (<rect
+                  key={event.id}
+                  x={startEventCord}
+                  y="0"
+                  width={width}
+                  height="28"
+                  className="timeline__event-track"
+                  onClick={e => props.toggleSummaryDialog(e.target.getBoundingClientRect(), event)}
+                />);
+              })}
             </g>))}
         </g>))}
     </g>
@@ -69,9 +90,7 @@ const InteractiveArea = ({ floors }) => {
       </div>
       <div className="graph-container">
         <svg className="graph">
-
           {floorsTracks}
-
           {currentLine}
           {verticalLines}
         </svg>
@@ -82,6 +101,7 @@ const InteractiveArea = ({ floors }) => {
 
 InteractiveArea.propTypes = {
   floors: PropTypes.arrayOf(PropTypes.object),
+  toggleSummaryDialog: PropTypes.func.isRequired,
 };
 
 InteractiveArea.defaultProps = {

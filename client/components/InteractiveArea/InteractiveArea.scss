@@ -73,3 +73,17 @@
     stroke: rgba(19,100,205,0.10);
     stroke-width: 1;
 }
+
+.timeline__event-track {
+    fill: $event-track;
+    &:hover {
+        fill: $event-track-hover;
+    }
+    &:active {
+        fill: $event-track-pressed;
+    }
+}
+
+.timeline__empty-track {
+    fill: white;
+}

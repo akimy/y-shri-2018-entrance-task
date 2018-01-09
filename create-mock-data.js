@@ -17,6 +17,26 @@ function createData() {
       avatarUrl: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
       homeFloor: 2,
     },
+    {
+      login: 'Тор Одинович',
+      avatarUrl: 'https://s1.stabroeknews.com/images/2014/11/20141120chrishemsworth.jpg',
+      homeFloor: 6,
+    },
+    {
+      login: 'Лекс Лютер',
+      avatarUrl: 'https://vignette.wikia.nocookie.net/zlodei/images/0/03/5.jpg/revision/latest?cb=20140101124250&path-prefix=ru',
+      homeFloor: 5,
+    },
+    {
+      login: 'Томас Андерсон',
+      avatarUrl: 'https://upload.wikimedia.org/wikipedia/ru/thumb/4/4c/Neo2.jpg/220px-Neo2.jpg',
+      homeFloor: 2,
+    },
+    {
+      login: 'Дарт Вейдер',
+      avatarUrl: 'http://drivejet.ru/wp-content/uploads/2017/11/d5db8e92_shutterstock_239338216.xxxlarge_2x-230x153.jpg',
+      homeFloor: 1,
+    },
   ]);
 
   const roomsPromise = models.Room.bulkCreate([
@@ -36,19 +56,20 @@ function createData() {
       floor: 2,
     },
     {
-      title: 'Ствола',
+      title: 'Два ствола',
       capacity: 2,
       floor: 2,
     },
     {
-      title: '14',
-      capacity: 6,
-      floor: 3,
+      title: 'Комната для дуэлей',
+      floor: 6,
+      capacity: 2,
     },
   ]);
 
   const HOUR = 60 * 60 * 1000;
   const now = new Date();
+  const oneHourBefore = new Date(now.getTime() - HOUR);
   const oneHourLater = new Date(now.getTime() + HOUR);
   const twoHoursLater = new Date(oneHourLater.getTime() + HOUR);
   const threeHoursLater = new Date(twoHoursLater.getTime() + HOUR);
@@ -66,7 +87,12 @@ function createData() {
     },
     {
       title: '🍨 Пробуем kefir.js',
-      dateStart: threeHoursLater,
+      dateStart: twoHoursLater,
+      dateEnd: threeHoursLater,
+    },
+    {
+      title: 'Звездные разборки',
+      dateStart: oneHourBefore,
       dateEnd: twoHoursLater,
     },
   ]);
@@ -82,10 +108,12 @@ function createData() {
       promises.push(events[0].setRoom(rooms[0]));
       promises.push(events[1].setRoom(rooms[1]));
       promises.push(events[2].setRoom(rooms[2]));
+      promises.push(events[3].setRoom(rooms[4]));
 
       promises.push(events[0].setUsers([users[0], users[1]]));
       promises.push(events[1].setUsers([users[1], users[2]]));
       promises.push(events[2].setUsers([users[0], users[2]]));
+      promises.push(events[3].setUsers([users[3], users[6]]));
 
       return Promise.all(promises);
     });

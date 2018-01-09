@@ -13,6 +13,10 @@
     src: url("../../shared/fonts/HelveticaNeueM.ttf");
 }
 
+%font-preset {
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 $faded: #e9ecef;
 $accept-normal: #007dff;
 $accept-hover: #0058ff;
@@ -24,3 +28,7 @@ $decline-disabled: #e2e5e8;
 $label-faded: #858E98;
 $tile-hover: #98a9b9;
 $tile-pressed: #8594a2;
+
+$event-track: #d5dfe9;
+$event-track-hover: #98a9b9;
+$event-track-pressed: #8594a2;

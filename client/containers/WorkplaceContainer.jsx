@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import fetch from '../shared/apolloFetch';
 import Workplace from '../components/Workplace';
 
 class WorkplaceContainer extends Component {
@@ -6,50 +7,38 @@ class WorkplaceContainer extends Component {
     super();
     this.state = {
       floors: [],
-      rooms: [
-        {
-          title: 'Поле непаханное',
-          floor: 2,
-          id: 1,
-          capacity: 8,
-        },
-        {
-          title: 'Голубая луна',
-          floor: 2,
-          id: 2,
-          capacity: 5,
-        },
-        {
-          title: 'Сиреневая газель',
-          floor: 5,
-          id: 5,
-          capacity: 2,
-        },
-        {
-          title: 'Зеленая башня',
-          floor: 5,
-          id: 4,
-          capacity: 4,
-        },
-        {
-          title: 'Темная пещера',
-          floor: 2,
-          id: 3,
-          capacity: 10,
-        },
-        {
-          title: 'Мрачный механик',
-          floor: 8,
-          id: 6,
-          capacity: 2,
-        },
-      ],
     };
+
     this.morphRoomsToFloorsArray = this.morphRoomsToFloorsArray.bind(this);
   }
 
   componentWillMount() {
-    this.morphRoomsToFloorsArray(this.state.rooms);
+    fetch({
+      query: `{
+        rooms {
+          id
+          title
+          capacity
+          floor
+          events {
+            id
+            title
+            dateStart
+            dateEnd
+            room {
+              title
+            }
+            users {
+              id
+              login
+              avatarUrl
+            }
+          }
+        }
+      }`,
+    }).then((res) => {
+      this.morphRoomsToFloorsArray(res.data.rooms);
+    });
   }
 
   morphRoomsToFloorsArray(rooms) {
@@ -79,10 +68,12 @@ class WorkplaceContainer extends Component {
     this.setState({ floors });
   }
 
-
   render() {
     return (
-      <Workplace {...this.state} />
+      <Workplace
+        {...this.state}
+        {...this.props}
+      />
     );
   }
 }
