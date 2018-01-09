@@ -65,11 +65,13 @@
 }
 
 .timeline__current-line {
+    pointer-events : none;
     stroke: $accept-normal;
     stroke-width: 1;
 }
 
 .timeline__vertical-lines {
+    pointer-events : none;
     stroke: rgba(19,100,205,0.10);
     stroke-width: 1;
 }
