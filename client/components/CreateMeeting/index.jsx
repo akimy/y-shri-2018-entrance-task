@@ -11,7 +11,12 @@ import './CreateMeeting.scss';
 import CloseIcon from './close.svg';
 
 const CreateMeeting = props => (
-  <section className="create-meeting">
+  <section
+    className="create-meeting"
+    onClick={
+    () => { props.selectingMembersTurningOff(); }
+  }
+  >
     <div className="create-meeting__content-wrapper">
       <div className="create-meeting__content">
         <div className="row">
@@ -41,7 +46,11 @@ const CreateMeeting = props => (
             value={props.theme}
             onChange={props.handleChangeTheme}
           />
-          <DatePick />
+          <DatePick
+            setDate={props.setDate}
+            setTimeStart={props.setTimeStart}
+            setTimeEnd={props.setTimeEnd}
+          />
         </div>
         <div className="row_align-top">
           <div className="column">
@@ -87,6 +96,9 @@ const CreateMeeting = props => (
 CreateMeeting.propTypes = {
   filteredUsers: PropTypes.arrayOf(PropTypes.object).isRequired,
   recommendedRooms: PropTypes.arrayOf(PropTypes.any).isRequired,
+  setDate: PropTypes.func.isRequired,
+  setTimeStart: PropTypes.func.isRequired,
+  setTimeEnd: PropTypes.func.isRequired,
   selectedRoom: PropTypes.shape({
     title: PropTypes.string.isRequired,
     floor: PropTypes.number.isRequired,

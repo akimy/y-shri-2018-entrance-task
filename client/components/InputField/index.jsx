@@ -14,12 +14,17 @@ const InputField = ({ id, ...props }) => (
       placeholder={props.placeholder}
       onFocus={() => props.onFocus()}
       onBlur={() => props.onBlur()}
-      onChange={e => props.onChange(e.target.value)}
+      onChange={(e) => {
+        props.onChange(e.target.value);
+      }}
       onKeyDown={(e) => {
         if (e.keyCode === 40) {
           e.preventDefault();
           props.handleFocusList();
         }
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
       }}
     />
   </div>

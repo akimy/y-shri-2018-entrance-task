@@ -3,5 +3,7 @@ module.exports = {
     "rules": {
         "jsx-a11y/label-has-for": "off",
         "no-return-assign": "off",
+        "jsx-a11y/mouse-events-have-key-events": "off",
+        "jsx-a11y/mouse-events-have-key-events": "off",
     }
 };

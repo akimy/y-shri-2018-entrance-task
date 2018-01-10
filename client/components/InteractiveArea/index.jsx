@@ -74,7 +74,8 @@ const InteractiveArea = ({ floors, ...props }) => {
             <g key={room.id} transform={`translate(0, ${j * 52})`}>
               <rect x="0" y="0" width="100%" height="28" className="timeline__empty-track" />
               {room.events.map((event) => {
-                let width = calculateXCordForEvent(event.dateEnd) - calculateXCordForEvent(event.dateStart);
+                let width = calculateXCordForEvent(event.dateEnd) -
+                calculateXCordForEvent(event.dateStart);
 
                 // End of the day
                 if (width < 0) {

@@ -9,7 +9,10 @@ const SelectMembersScroll = ({ members, addUserToSelected, ...props }) => {
       role="button"
       key={member.id}
       className="select-scroll__member-container"
-      onClick={() => { addUserToSelected(member); }}
+      onClick={(e) => {
+        e.stopPropagation();
+        addUserToSelected(member);
+      }}
       onKeyDown={(e) => {
         if (e.keyCode !== 9) e.preventDefault();
         if (e.keyCode === 40) {
@@ -23,7 +26,7 @@ const SelectMembersScroll = ({ members, addUserToSelected, ...props }) => {
     >
       <img className="select-scroll__avatar" src={member.avatarUrl} alt={`Изображение пользователя ${member.login}`} />
       <span className="select-scroll__login">{`${member.login} ⸱`}</span>
-      <span className="select-scroll__floor">{`${member.floor} этаж`}</span>
+      <span className="select-scroll__floor">{`${member.homeFloor} этаж`}</span>
     </div>
   ));
   return (

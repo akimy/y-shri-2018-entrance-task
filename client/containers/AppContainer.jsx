@@ -8,7 +8,7 @@ class AppContainer extends Component {
       modalCreated: false,
       summaryDialogOpened: false,
       summaryDialogContent: {},
-      stage: 'workplace',
+      stage: 'createMeeting',
     };
 
     this.closeSummaryDialog = this.closeSummaryDialog.bind(this);

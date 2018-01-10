@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CreateMeeting from '../components/CreateMeeting';
+import fetch from '../shared/apolloFetch';
 
 class CreateMeetingContainer extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      date: '',
+      timeStart: '',
+      timeEnd: '',
       selectingMembers: false,
       selectedUsers: [],
       filteredUsers: [],
@@ -38,6 +42,9 @@ class CreateMeetingContainer extends Component {
       userSearchInput: '',
     };
 
+    this.setDate = this.setDate.bind(this);
+    this.setTimeStart = this.setTimeStart.bind(this);
+    this.setTimeEnd = this.setTimeEnd.bind(this);
     this.cancelSelectedRoom = this.cancelSelectedRoom.bind(this);
     this.selectRoom = this.selectRoom.bind(this);
     this.handleFocusList = this.handleFocusList.bind(this);
@@ -52,52 +59,36 @@ class CreateMeetingContainer extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      users: [
-        {
-          login: 'Лекс Лютер',
-          avatarUrl: 'https://vignette.wikia.nocookie.net/zlodei/images/0/03/5.jpg/revision/latest?cb=20140101124250&path-prefix=ru',
-          floor: 7,
-          id: 1,
-        },
-        {
-          login: 'Томас Андерсон',
-          avatarUrl: 'https://upload.wikimedia.org/wikipedia/ru/thumb/4/4c/Neo2.jpg/220px-Neo2.jpg',
-          id: 2,
-          floor: 2,
-        },
-        {
-          login: 'Дарт Вейдер',
-          avatarUrl: 'http://drivejet.ru/wp-content/uploads/2017/11/d5db8e92_shutterstock_239338216.xxxlarge_2x-230x153.jpg',
-          id: 3,
-          floor: 8,
-        },
-        {
-          login: 'veged',
-          avatarUrl: 'https://avatars3.githubusercontent.com/u/15365?s=460&v=4',
-          id: 4,
-          floor: 4,
-        },
-        {
-          login: 'alt-j',
-          avatarUrl: 'https://avatars1.githubusercontent.com/u/3763844?s=400&v=4',
-          id: 5,
-          floor: 5,
-        },
-        {
-          login: 'yeti-or',
-          avatarUrl: 'https://avatars0.githubusercontent.com/u/1813468?s=460&v=4',
-          id: 6,
-          floor: 4,
-        },
-        {
-          login: 'Тор Одинович',
-          avatarUrl: 'https://s1.stabroeknews.com/images/2014/11/20141120chrishemsworth.jpg',
-          id: 7,
-          floor: 9,
-        },
-      ],
+    fetch({
+      query: `{
+        users {
+          id
+          login
+          avatarUrl
+          homeFloor
+        }
+      }`,
+    }).then((res) => {
+      this.setState({ users: res.data.users });
     });
+
+    this.setState({
+      date: new Date(),
+      timeStart: new Date(),
+      timeEnd: new Date((new Date()).getTime() + (60 * (60 * 1000))),
+    });
+  }
+
+  setDate(date) {
+    this.setState({ date });
+  }
+
+  setTimeStart(timeStart) {
+    this.setState({ timeStart });
+  }
+
+  setTimeEnd(timeEnd) {
+    this.setState({ timeEnd });
   }
 
   addUserToSelected(user) {
@@ -173,6 +164,9 @@ class CreateMeetingContainer extends Component {
         handleFocusList={this.handleFocusList}
         selectRoom={this.selectRoom}
         cancelSelectedRoom={this.cancelSelectedRoom}
+        setDate={this.setDate}
+        setTimeStart={this.setTimeStart}
+        setTimeEnd={this.setTimeEnd}
       />
     );
   }
