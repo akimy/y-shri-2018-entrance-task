@@ -2,6 +2,7 @@
 
 .interactive-area {
     display: flex;
+    flex: 1 0 auto;
     flex-direction: column;
     height: 100%;
     position: relative;
@@ -20,7 +21,6 @@
 
 .timeline {
     display: flex;
-    width: 1750px;
     flex-direction: row;
     align-items: center;
     min-height: 46px;
@@ -79,6 +79,9 @@
 .timeline__event-track {
     fill: $event-track;
     &:hover {
+        fill: $event-track-hover;
+    }
+    &:focus {
         fill: $event-track-hover;
     }
     &:active {

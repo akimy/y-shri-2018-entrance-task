@@ -1,3 +1,5 @@
+@import '../../shared/styles';
+
 .modal__mask {
     position: fixed;
     z-index: 9998;
@@ -37,8 +39,7 @@
 }
 
 .modal__label {
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: 600;
+    @extend %font-bold;
     font-size: 20px;
     width: 100%;
     text-align: center;
@@ -46,7 +47,7 @@
 }
 
 .modal__text {
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    @extend %font-regular;
     font-size: 15px;
     margin-bottom: 6px;
     text-align: center;

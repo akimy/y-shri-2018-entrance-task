@@ -1,8 +1,8 @@
 @import '../../shared/styles';
 
 %button {
+    @extend %font-medium;
     border-radius: 4px;
-    font-family: "HelveticaNeueMedium", Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 13px;
     letter-spacing: 0;
     height: 36px;

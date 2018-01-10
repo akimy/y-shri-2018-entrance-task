@@ -16,8 +16,21 @@ const CreateMeeting = props => (
       <div className="create-meeting__content">
         <div className="row">
           <h3 className="meeting__label">Новая встреча</h3>
-          <span className="meeting__clear-icon-wrapper" title="Очистить изменения">
-            <img className="meeting__clear-icon" src={CloseIcon} alt="Очистить изменения" />
+          <span
+            role="button"
+            tabIndex="0"
+            className="meeting__clear-icon-wrapper"
+            title="Отмена"
+            onKeyDown={(e) => {
+              if ((e.keyCode === 32) || (e.keyCode === 13)) {
+                props.declineCreating();
+              }
+            }}
+            onClick={() => {
+              props.declineCreating();
+            }}
+          >
+            <img className="meeting__clear-icon" src={CloseIcon} alt="Отмена" />
           </span>
         </div>
         <div className="row_align-end" style={{ marginBottom: '24px' }}>

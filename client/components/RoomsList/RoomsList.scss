@@ -14,23 +14,21 @@
 }
 
 .floor__number {
-    font-family: 'HelveticaNeueBold', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: 500;
+    @extend %font-bold;
     font-size: 11px;
     color: $label-faded;
     margin-bottom: 8px;
 }
 
 .floor__room-capacity {
+    @extend %font-regular;
     margin-bottom: 16px;
     font-size: 13px;
     color: black;
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .floor__room-title {
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: 500;
+    @extend %font-medium;
     font-size: 15px;
     color: black;
     margin-bottom: 2px;

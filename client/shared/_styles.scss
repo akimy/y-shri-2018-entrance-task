@@ -1,20 +1,37 @@
 @font-face {
 	font-family: "HelveticaNeue";
-    src: url("../../shared/fonts/HelveticaNeue.ttf");
+    src: url("../../shared/fonts/HelveticaNeueCyr-Roman.woff") format("woff2"),
+        url("../../shared/fonts/HelveticaNeueCyr-Roman.ttf") format("ttf"),
+        url("../../shared/fonts/HelveticaNeueCyr-Roman.eot") format("eot");
 }
 
 @font-face {
 	font-family: "HelveticaNeueBold";
-    src: url("../../shared/fonts/HelveticaNeueBd.ttf");
+    src: url("../../shared/fonts/HelveticaNeueCyr-Bold.woff") format("woff2"),
+        url("../../shared/fonts/HelveticaNeueCyr-Bold.ttf") format("ttf"),
+        url("../../shared/fonts/HelveticaNeueCyr-Bold.eot") format("eot");
 }
 
 @font-face {
 	font-family: "HelveticaNeueMedium";
-    src: url("../../shared/fonts/HelveticaNeueM.ttf");
+    src: url("../../shared/fonts/HelveticaNeueCyr-Medium.woff") format("woff2"),
+        url("../../shared/fonts/HelveticaNeueCyr-Medium.ttf") format("ttf"),
+        url("../../shared/fonts/HelveticaNeueCyr-Medium.eot") format("eot");
 }
 
-%font-preset {
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+%font-regular {
+    font-family: "HelveticaNeue", Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+    line-height: 17px;
+}
+
+%font-medium {
+    font-family: "HelveticaNeueMedium", Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+    line-height: 17px;
+}
+
+%font-bold {
+    font-family: "HelveticaNeueBold", Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+    line-height: 17px;
 }
 
 $faded: #e9ecef;

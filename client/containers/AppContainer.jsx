@@ -26,6 +26,7 @@ class AppContainer extends Component {
   }
 
   toggleSummaryDialog(coords, event) {
+    console.log(coords);
     this.setState(() => ({ summaryDialogContent: event, summaryDialogCoords: coords }), () => {
       this.setState({ summaryDialogOpened: true });
     });

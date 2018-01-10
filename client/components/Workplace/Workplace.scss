@@ -11,12 +11,12 @@
     flex-direction: column;
     flex: 1 0 auto;
     min-width: 245px;
+    max-width: 245px;
 }
 
 .workplace__right-column {
     display: flex;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    flex: 1 0 auto;
     background-color: #f6f7f9;
 
     &::-webkit-scrollbar {

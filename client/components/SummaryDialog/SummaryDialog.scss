@@ -50,8 +50,8 @@
 }
 
 .summary-dialog__title {
-    @extend %font-preset;
-    font-weight: 500;
+    @extend %font-bold;
+    line-height: 24px;
     font-size: 15px;
     color: black;
     margin-bottom: 2px;
@@ -62,21 +62,21 @@
 }
 
 .summary-dialog__date {
-    @extend %font-preset;
+    @extend %font-regular;
     font-size: 13px;
     color: black;
     margin-bottom: 20px;
 }
 
 .summary-dialog__user-login {
-    @extend %font-preset;
+    @extend %font-regular;
     font-size: 13px;
     color: black;
     margin-right: 4px;
 }
 
 .summary-dialog__users-count {
-    @extend %font-preset;
+    @extend %font-regular;
     font-size: 13px;
     color: $label-faded;
 }

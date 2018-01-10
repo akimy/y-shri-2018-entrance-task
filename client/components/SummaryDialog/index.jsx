@@ -3,12 +3,22 @@ import PropTypes from 'prop-types';
 import './SummaryDialog.scss';
 import EditIcon from './edit.svg';
 
+const getPlural = (val) => {
+  if (val === 1) {
+    return 'участник';
+  } else if ((val >= 2) && (val <= 4)) {
+    return 'участника';
+  }
+
+  return 'участников';
+};
+
 const SummaryDialog = (props) => {
   let { x, y } = props.coords;
   let offset = 0;
   if (x + 350 > window.innerWidth) {
-    offset = 140;
     x = window.innerWidth - 350;
+    offset = props.coords.x - x - 150;
   } else {
     x += (props.coords.width / 2) - 169;
   }
@@ -51,7 +61,8 @@ const SummaryDialog = (props) => {
               alt="Изображение пользователя"
             />
             <span className="summary-dialog__user-login">{`${props.users[0].login}`}</span>
-            <span className="summary-dialog__users-count">{`и еще ${props.users.length - 1} участников`}</span>
+            {(props.users.length - 1) &&
+            <span className="summary-dialog__users-count">{`и еще ${(props.users.length - 1)} ${getPlural(props.users.length - 1)}`}</span>}
           </div>
         </div>
         <div className="summary-dialog__icons-container">
@@ -79,7 +90,7 @@ SummaryDialog.propTypes = {
   dateStart: PropTypes.string.isRequired,
   dateEnd: PropTypes.string.isRequired,
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
-  room: PropTypes.objectOf(PropTypes.array).isRequired,
+  room: PropTypes.objectOf(PropTypes.any).isRequired,
   title: PropTypes.string.isRequired,
 };
 

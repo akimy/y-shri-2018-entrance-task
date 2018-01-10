@@ -2,27 +2,45 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './InteractiveArea.scss';
 
-const calculateXCord = val => (((val * 60) * 7) / 6) + 34.5;
+const currentDateTime = new Date();
+
+/** Display current
+ * Function for boundary cases (From 8AM to 11PM)
+ * @returns bool
+ */
+
+const displayCurrent = () => !(currentDateTime.getHours() < 8 || currentDateTime.getHours() > 24);
+
+/**
+ * @param {Number} val timeline hour
+ * @returns {Number} x cord for layout greed
+ */
+const calculateXCord = val => ((((val - 8) * 60) * 7) / 6) + 34.5;
+
+/**
+ * @param {DateTime} dateStart
+ * @returns {Number} left x cord for event
+ */
 const calculateXCordForEvent = dateStart =>
-  (((((new Date(dateStart)).getHours() * 60) +
-  ((new Date(dateStart)).getMinutes())) * 7) / 6) + 34.5;
+  ((((((new Date(dateStart)).getHours() - 8) * 60) +
+  (new Date(dateStart)).getMinutes()) * 7) / 6) + 34.5;
+
 
 const InteractiveArea = ({ floors, ...props }) => {
-  const currentDateTime = new Date();
   const [hour, min] = [currentDateTime.getHours(), currentDateTime.getMinutes()];
   const leftMarginForCurrent = calculateXCordForEvent(currentDateTime) - 25;
 
-  const timeLineElements = [...Array(25).keys()].map(val => (
+  const timeLineElements = [...Array(25).keys()].splice(8, 16).map(val => (
     <div key={val} className={val > hour ? 'timeline__hour-label' : 'timeline__hour-label_faded'}>
-      {`${val === 24 ? '0' : val}:00`}
+      {`${val}:00`}
     </div>));
 
-  const verticalLines = [...Array(25).keys()].map(val => (
+  const verticalLines = [...Array(16).keys()].map(val => (
     <line
-      key={val}
-      x1={calculateXCord(val)}
+      key={val + 8}
+      x1={calculateXCord(val + 8)}
       y1="46"
-      x2={calculateXCord(val)}
+      x2={calculateXCord(val + 8)}
       y2="100%"
       className="timeline__vertical-lines"
     />
@@ -50,10 +68,10 @@ const InteractiveArea = ({ floors, ...props }) => {
   const floorsTracks = (
     <g transform="translate(0, 102.8)">
       {floors.map((el, i) => (
-        <g key={el.floor} transform={`translate(0, ${(i * 43) + (49 * previousRoomsCount)})`}>
+        <g key={el.floor} transform={`translate(0, ${(i * 43) + (52 * previousRoomsCount)})`}>
           {previousRoomsCount += el.rooms.length}
           {el.rooms.map((room, j) => (
-            <g key={room.id} transform={`translate(0, ${j * 49})`}>
+            <g key={room.id} transform={`translate(0, ${j * 52})`}>
               <rect x="0" y="0" width="100%" height="28" className="timeline__empty-track" />
               {room.events.map((event) => {
                 let width = calculateXCordForEvent(event.dateEnd) - calculateXCordForEvent(event.dateStart);
@@ -70,6 +88,12 @@ const InteractiveArea = ({ floors, ...props }) => {
                   width={width}
                   height="28"
                   className="timeline__event-track"
+                  tabIndex="0"
+                  onKeyDown={(e) => {
+                    if ((e.keyCode === 32) || (e.keyCode === 13)) {
+                      props.toggleSummaryDialog(e.target.getBoundingClientRect(), event);
+                    }
+                  }}
                   onClick={e => props.toggleSummaryDialog(e.target.getBoundingClientRect(), event)}
                 />);
               })}
@@ -81,17 +105,18 @@ const InteractiveArea = ({ floors, ...props }) => {
   return (
     <div className="interactive-area">
       <div className="timeline">
+        {displayCurrent() &&
         <div className="timeline__current-badge-container" style={{ left: `${leftMarginForCurrent}px` }}>
           <span className="timeline__current-badge-text">
             {`${hour}:${min < 10 ? '0' : ''}${min}`}
           </span>
-        </div>
+        </div>}
         {timeLineElements}
       </div>
       <div className="graph-container">
         <svg className="graph">
           {floorsTracks}
-          {currentLine}
+          {displayCurrent() && currentLine}
           {verticalLines}
         </svg>
       </div>
