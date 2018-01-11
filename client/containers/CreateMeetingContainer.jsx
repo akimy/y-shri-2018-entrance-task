@@ -9,17 +9,19 @@ class CreateMeetingContainer extends Component {
 
     this.state = {
       date: '',
-      timeStart: '',
+      theme: '',
+      error: '',
       timeEnd: '',
-      selectingMembers: false,
+      timeStart: '',
       selectedUsers: [],
       filteredUsers: [],
-      recommendedRooms: [],
       selectedRoom: null,
-      theme: '',
       userSearchInput: '',
+      recommendations: [],
+      selectingMembers: false,
     };
 
+    this.countFloorSteps = this.countFloorSteps.bind(this);
     this.getRecommendation = this.getRecommendation.bind(this);
     this.tryToGetRecommendation = this.tryToGetRecommendation.bind(this);
     this.setDate = this.setDate.bind(this);
@@ -60,16 +62,38 @@ class CreateMeetingContainer extends Component {
   }
 
   /**
- * @param {EventDate} date Дата планируемой встречи.
- * @param {Person[]} members Участники планируемой встречи.
- * @param {Object} db
- * @param {Event[]} db.events Список все встреч.
- * @param {Room[]} db.rooms Список всех переговорок.
- * @returns {Recommendation[]}
+ * @param {EventDate} date Date of planning meeting
+ * @param {Person[]} members Members of meeting.
+ * @param {Object} db Database fetch data (rooms with relations)
+ * @returns {Recommendation[]} Rooms
  */
+  getRecommendation(date, members, db) {
+    const recommendations = [];
+    const roomsWithSufficientCapacity = db.rooms.filter(room => room.capacity >= members.length);
+    if (roomsWithSufficientCapacity.length === 0) {
+      this.showError('У нас не существует комнат с достаточным количеством мест для вашей компании');
+    } else {
+      const freeRooms = roomsWithSufficientCapacity.filter(room =>
+        (room.events.length === 0 ? true : room.events.reduce((acc, event) => {
+          const roomEventStart = new Date(event.dateStart).getTime();
+          const roomEventEnd = new Date(event.dateEnd).getTime();
+          if ((date.start > roomEventEnd) || (date.end < roomEventStart)) {
+            return acc;
+          }
+          return false;
+        }, true)));
+      if (freeRooms.length === 0) { // All rooms currently is busy
 
-  getRecommendation() {
-    console.log('RECCOMENDATION');
+      } else {
+        const sortedRooms = freeRooms.sort((first, second) =>
+          (this.countFloorSteps(first, members) > this.countFloorSteps(second, members) ? 1 : -1));
+        sortedRooms.splice(0, 3).forEach((room) => {
+          recommendations.push({ date: { start: date.start, end: date.end }, room, swap: null });
+        });
+      }
+    }
+
+    this.setState({ recommendations });
   }
 
   setDate(date) {
@@ -90,11 +114,66 @@ class CreateMeetingContainer extends Component {
     });
   }
 
+  showError(message) {
+    this.setState({ error: message });
+  }
+
+  countFloorSteps(room, users) {
+    return users.reduce((acc, user) => acc += Math.abs(user.homeFloor - room.floor), 0);
+  }
+
   tryToGetRecommendation() {
-    const { selectedUsers, timeStart, timeEnd } = this.state;
+    this.cancelSelectedRoom();
+    const {
+      selectedUsers, timeStart, timeEnd, date,
+    } = this.state;
     if ((selectedUsers.length !== 0) &&
     (((timeEnd.getHours() - timeStart.getHours()) > 0))) {
-      this.getRecommendation();
+      fetch({
+        query: `{
+          rooms {
+            id
+            title
+            capacity
+            floor
+            events {
+              id
+              title
+              dateStart
+              dateEnd
+              users {
+                id
+              }
+              room {
+                id
+              }
+            }
+          }
+        }`,
+      }).then((db) => {
+        let timestampDate = date;
+        timestampDate.setHours(0);
+        timestampDate.setMinutes(0);
+        timestampDate.setSeconds(0);
+        timestampDate = timestampDate.getTime();
+
+        let timestampStart = new Date(timeStart);
+        timestampStart = timestampStart.getHours() * 60 * 60 * 1000
+        + timestampStart.getMinutes() * 60 * 1000 + timestampStart.getSeconds() * 1000;
+
+        let timestampEnd = new Date(timeEnd);
+        timestampEnd = timestampEnd.getHours() * 60 * 60 * 1000
+        + timestampEnd.getMinutes() * 60 * 1000 + timestampEnd.getSeconds() * 1000;
+
+        const eventDate = {
+          start: timestampDate + timestampStart,
+          end: timestampDate + timestampEnd,
+        };
+
+        this.getRecommendation(eventDate, selectedUsers, db.data);
+      });
+    } else {
+      this.setState({ recommendations: [] });
     }
   }
 
@@ -110,8 +189,8 @@ class CreateMeetingContainer extends Component {
     this.listElement.firstChild.focus();
   }
 
-  selectRoom(room) {
-    this.setState({ selectedRoom: room });
+  selectRoom(recommendation) {
+    this.setState({ selectedRoom: recommendation });
   }
 
   cancelSelectedRoom() {
@@ -119,9 +198,41 @@ class CreateMeetingContainer extends Component {
   }
 
   acceptCreating() {
-    if (this.state.selectedRoom) {
-      this.props.toggleModalCreated();
-      this.props.changeStageTo('workplace');
+    const { selectedRoom, theme, selectedUsers } = this.state;
+    if (selectedRoom) {
+      if (theme) {
+        const usersIds = selectedUsers.map(el => Number(el.id));
+        const roomId = Number(selectedRoom.room.id);
+        const variables = {
+          input: {
+            title: theme,
+            dateStart: new Date(selectedRoom.date.start),
+            dateEnd: new Date(selectedRoom.date.end),
+          },
+          usersIds,
+          roomId,
+        };
+        fetch({
+          query: `
+          mutation CreateEvent($input:EventInput!, $usersIds:[ID], $roomId:ID!) {
+            createEvent(input:$input, usersIds:$usersIds, roomId:$roomId) {
+              dateStart
+              dateEnd
+              room {
+                title
+                floor
+              }
+            }
+          }`,
+          variables,
+        }).then((res) => {
+          this.props.setModalCreatedContent(res.data);
+        });
+        this.props.toggleModalCreated();
+        this.props.changeStageTo('workplace');
+      } else {
+        this.showError('Заполните поле "Тема"');
+      }
     }
   }
 

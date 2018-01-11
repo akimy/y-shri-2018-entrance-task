@@ -9,12 +9,18 @@ class AppContainer extends Component {
       summaryDialogOpened: false,
       summaryDialogContent: {},
       stage: 'workplace',
+      modalCreatedContent: '',
     };
 
+    this.setModalCreatedContent = this.setModalCreatedContent.bind(this);
     this.closeSummaryDialog = this.closeSummaryDialog.bind(this);
     this.toggleSummaryDialog = this.toggleSummaryDialog.bind(this);
     this.toggleModalCreated = this.toggleModalCreated.bind(this);
     this.changeStageTo = this.changeStageTo.bind(this);
+  }
+
+  setModalCreatedContent(content) {
+    this.setState({ modalCreatedContent: content.createEvent });
   }
 
   toggleModalCreated() {
@@ -44,6 +50,7 @@ class AppContainer extends Component {
         toggleModalCreated={this.toggleModalCreated}
         toggleSummaryDialog={this.toggleSummaryDialog}
         changeStageTo={this.changeStageTo}
+        setModalCreatedContent={this.setModalCreatedContent}
       />
     );
   }

@@ -15,12 +15,20 @@ const App = props => (
     onClick={() => { props.closeSummaryDialog(); }}
   >
     <Header {...props} />
-    {props.stage === 'workplace' && props.modalCreated &&
-    <ModalCreated toggleModalCreated={props.toggleModalCreated} />}
+    {props.stage === 'workplace' && props.modalCreated && props.modalCreatedContent &&
+    <ModalCreated
+      toggleModalCreated={props.toggleModalCreated}
+      modalCreatedContent={props.modalCreatedContent}
+    />}
     {props.stage === 'workplace' && <WorkplaceContainer toggleSummaryDialog={props.toggleSummaryDialog} />}
     {props.stage === 'editMeeting' && <EditMeetingContainer />}
-    {props.stage === 'createMeeting' && <CreateMeetingContainer {...props} />}
-    {props.summaryDialogOpened && <SummaryDialog {...props.summaryDialogContent} coords={props.summaryDialogCoords} />}
+    {props.stage === 'createMeeting' &&
+    <CreateMeetingContainer
+      {...props}
+      setModalCreatedContent={props.setModalCreatedContent}
+    />}
+    {props.summaryDialogOpened &&
+    <SummaryDialog {...props.summaryDialogContent} coords={props.summaryDialogCoords} />}
   </main>
 );
 
@@ -39,6 +47,8 @@ App.propTypes = {
   }).isRequired,
   summaryDialogCoords: PropTypes.objectOf(PropTypes.any),
   closeSummaryDialog: PropTypes.func.isRequired,
+  setModalCreatedContent: PropTypes.func.isRequired,
+  modalCreatedContent: PropTypes.any.isRequired,
 };
 
 App.defaultProps = {

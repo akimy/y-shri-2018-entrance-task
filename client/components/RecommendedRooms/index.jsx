@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import './RecommendedRooms.scss';
 
 const RecommendedRooms = (props) => {
-  const roomsJsx = props.rooms.map(room => (
+  const getDateString = (start, end) => `${new Date(start).getHours()}:${new Date(start).getMinutes()} – 
+  ${new Date(end).getHours()}:${new Date(end).getMinutes()}`;
+
+  const roomsJsx = props.recommendations.map(recommendation => (
     <div
       tabIndex="0"
       role="button"
       className="recommended-rooms__tile"
-      key={room.id}
-      onClick={() => props.selectRoom(room)}
+      key={recommendation.room.id}
+      onClick={() => props.selectRoom(recommendation)}
       onKeyDown={(e) => {
         if (e.keyCode !== 9) e.preventDefault();
         if (e.keyCode === 40) {
@@ -17,12 +20,12 @@ const RecommendedRooms = (props) => {
         } else if (e.keyCode === 38) {
           e.target.previousSibling.focus();
         } else if ((e.keyCode === 32) || (e.keyCode === 13)) {
-          props.selectRoom(room);
+          props.selectRoom(recommendation);
         }
       }}
     >
-      <span className="recommended-rooms__time">16:00 — 16:30</span>
-      <span className="recommended-rooms__name-floor">{`${room.title} ⸱ ${room.floor} этаж`}</span>
+      <span className="recommended-rooms__time">{getDateString(recommendation.date.start, recommendation.date.end)}</span>
+      <span className="recommended-rooms__name-floor">{`${recommendation.room.title} ⸱ ${recommendation.room.floor} этаж`}</span>
     </div>
   ));
 
@@ -37,7 +40,7 @@ const RecommendedRooms = (props) => {
 };
 
 RecommendedRooms.propTypes = {
-  rooms: PropTypes.arrayOf(PropTypes.object).isRequired,
+  recommendations: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 export default RecommendedRooms;

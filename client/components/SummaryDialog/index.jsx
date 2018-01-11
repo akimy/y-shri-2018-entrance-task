@@ -61,7 +61,7 @@ const SummaryDialog = (props) => {
               alt="Изображение пользователя"
             />
             <span className="summary-dialog__user-login">{`${props.users[0].login}`}</span>
-            {(props.users.length - 1) &&
+            {(props.users.length - 1) !== 0 &&
             <span className="summary-dialog__users-count">{`и еще ${(props.users.length - 1)} ${getPlural(props.users.length - 1)}`}</span>}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Intl from 'intl';
@@ -13,6 +14,15 @@ import {
 import './DatePick.scss';
 import CalendarIcon from './calendar.svg';
 
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: '#007dff',
+    primary2Color: '#007dff',
+    primary3Color: '#007dff',
+    pickerHeaderColor: '#007dff',
+  },
+});
+
 class DatePick extends Component {
   render() {
     const { DateTimeFormat } = Intl;
@@ -23,7 +33,7 @@ class DatePick extends Component {
       Дата
           </span>
           <div className="calendar-input">
-            <MuiThemeProvider>
+            <MuiThemeProvider muiTheme={muiTheme}>
               <DatePicker
                 ref={ref => this.datePickerRef = ref}
                 defaultDate={new Date()}
@@ -53,7 +63,7 @@ class DatePick extends Component {
           <span className="input-field__label" style={{ cursor: 'default' }}>
         Начало
           </span>
-          <MuiThemeProvider>
+          <MuiThemeProvider muiTheme={muiTheme}>
             <TimePicker
               ref={ref => this.timeStart = ref}
               id="time-start"
@@ -76,7 +86,7 @@ class DatePick extends Component {
           <span className="input-field__label" style={{ cursor: 'default' }}>
         Конец
           </span>
-          <MuiThemeProvider>
+          <MuiThemeProvider muiTheme={muiTheme}>
             <TimePicker
               ref={ref => this.timeEnd = ref}
               id="time-end"

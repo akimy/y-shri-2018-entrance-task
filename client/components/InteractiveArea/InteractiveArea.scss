@@ -78,6 +78,7 @@
 
 .timeline__event-track {
     fill: $event-track;
+    cursor: pointer;
     &:hover {
         fill: $event-track-hover;
     }
@@ -91,7 +92,6 @@
 
 .timeline__empty-track {
     fill: white;
-    cursor: none;
 }
 
 .timeline__pointer {

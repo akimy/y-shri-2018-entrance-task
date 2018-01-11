@@ -7,7 +7,6 @@ class WorkplaceContainer extends Component {
     super();
     this.state = {
       floors: [],
-      lastTimeInteractive: +new Date(),
       pointerXCord: null,
       hoveredRoomId: null,
     };
@@ -85,14 +84,7 @@ class WorkplaceContainer extends Component {
   }
 
   handleTimelineMouseMove(xCord) {
-    // if ((+new Date() - this.state.lastTimeInteractive) < 2000) {
-    // console.log('true');
-    // this.setState(() => ({ lastTimeInteractive: +new Date() }), () => {
     this.setState({ pointerXCord: (xCord - 245) });
-    // });
-    // } else {
-    //  console.log('false');
-    // }
   }
 
   handleTimelineClick(date) {

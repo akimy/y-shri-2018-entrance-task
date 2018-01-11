@@ -6,8 +6,7 @@
 }
 
 .selected-room__label {
-    font-family: 'HelveticaNeueBold', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: 600;
+    @extend %font-bold;
     font-size: 13px;
     margin-bottom: 5px;
 }
@@ -27,16 +26,15 @@
 }
 
 .selected-room__time {
+    @extend %font-bold;
     display: flex;
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: 500;
     font-size: 13px;
     margin-left: 10px;
 }
 
 .selected-room__name-floor {
+    @extend %font-regular;
     display: flex;
-    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin-left: 16px;
     font-size: 13px;
 }

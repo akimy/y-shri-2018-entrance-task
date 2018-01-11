@@ -77,13 +77,17 @@ const CreateMeeting = props => (
             />
           </div>
           <div className="column">
-            { props.recommendedRooms.length !== 0 && !props.selectedRoom &&
-            <RecommendedRooms rooms={props.recommendedRooms} selectRoom={props.selectRoom} />}
+            { props.recommendations.length !== 0 && !props.selectedRoom &&
+            <RecommendedRooms
+              recommendations={props.recommendations}
+              selectRoom={props.selectRoom}
+            />}
             { props.selectedRoom &&
             <SelectedRoom
-              title={props.selectedRoom.title}
-              floor={props.selectedRoom.floor}
+              title={props.selectedRoom.room.title}
+              floor={props.selectedRoom.room.floor}
               cancelSelectedRoom={props.cancelSelectedRoom}
+              date={props.selectedRoom.date}
             /> }
           </div>
         </div>
@@ -99,14 +103,14 @@ const CreateMeeting = props => (
 
 CreateMeeting.propTypes = {
   filteredUsers: PropTypes.arrayOf(PropTypes.object).isRequired,
-  recommendedRooms: PropTypes.arrayOf(PropTypes.any).isRequired,
+  recommendations: PropTypes.arrayOf(PropTypes.any).isRequired,
   setDate: PropTypes.func.isRequired,
   setTimeStart: PropTypes.func.isRequired,
   setTimeEnd: PropTypes.func.isRequired,
   selectedRoom: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    floor: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
+    date: PropTypes.objectOf(PropTypes.any),
+    room: PropTypes.objectOf(PropTypes.any),
+    swap: PropTypes.any,
   }),
   selectRoom: PropTypes.func.isRequired,
   cancelSelectedRoom: PropTypes.func.isRequired,

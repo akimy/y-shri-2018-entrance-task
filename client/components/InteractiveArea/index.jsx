@@ -107,8 +107,6 @@ const InteractiveArea = ({ floors, ...props }) => {
                 }}
                 onMouseOut={() => { props.handleTimelineMouseOut(); }}
               />
-              {props.hoveredRoomId === room.id &&
-              <rect className="timeline__pointer" rx="2" ry="2" x="0" y="0" transform={`translate(${props.pointerXCord}, 0)`} />}
               {room.events.map((event) => {
                 let width = calculateXCordForEvent(event.dateEnd) -
                 calculateXCordForEvent(event.dateStart);
@@ -118,7 +116,9 @@ const InteractiveArea = ({ floors, ...props }) => {
                   width = calculateXCord(24) - calculateXCordForEvent(event.dateStart);
                 }
                 const startEventCord = calculateXCordForEvent(event.dateStart);
-                return (<rect
+                return (
+                width > 0 &&
+                <rect
                   key={event.id}
                   x={startEventCord}
                   y="0"
@@ -134,6 +134,12 @@ const InteractiveArea = ({ floors, ...props }) => {
                   onClick={e => props.toggleSummaryDialog(e.target.getBoundingClientRect(), event)}
                 />);
               })}
+              {props.hoveredRoomId === room.id && props.pointerXCord < 1025 &&
+              <rect className="timeline__pointer" rx="2" ry="2" x="0" y="0" transform={`translate(${props.pointerXCord}, 0)`} />}
+              {props.hoveredRoomId === room.id &&
+              <line x1="28.5" x2="28.5" y1="8" y2="20" strokeWidth="2px" transform={`translate(${props.pointerXCord}, 0)`} stroke="white" />}
+              {props.hoveredRoomId === room.id &&
+              <line x1="22" x2="35" y1="14" y2="14" strokeWidth="2px" transform={`translate(${props.pointerXCord}, 0)`} stroke="white" />}
             </g>))}
         </g>))}
     </g>
