@@ -33,3 +33,10 @@
     color: black;
     margin-bottom: 2px;
 }
+
+.floor__room-title_hovered {
+    @extend %font-medium;
+    font-size: 15px;
+    color: $accept-normal;
+    margin-bottom: 2px;
+}

@@ -11,19 +11,33 @@ const currentDateTime = new Date();
 
 const displayCurrent = () => !(currentDateTime.getHours() < 8 || currentDateTime.getHours() > 24);
 
+
+/**
+ * Function for translate click event cord to time
+ * @param {float} x
+ * @returns {Date} event date
+ */
+const cordToTime = (x) => {
+  const hours = 8 + ((33 - x) / 65.9167);
+  const date = new Date();
+  date.setHours(0);
+  date.setMinutes(0);
+  return new Date(date.getTime() + ((hours * 60) * 1000));
+};
+
 /**
  * @param {Number} val timeline hour
  * @returns {Number} x cord for layout greed
  */
-const calculateXCord = val => ((((val - 8) * 60) * 7) / 6) + 34.5;
+const calculateXCord = val => ((((val - 8) * 56.5) * 7) / 6) + 33;
 
 /**
- * @param {DateTime} dateStart
+ * @param {Date} dateStart
  * @returns {Number} left x cord for event
  */
 const calculateXCordForEvent = dateStart =>
-  ((((((new Date(dateStart)).getHours() - 8) * 60) +
-  (new Date(dateStart)).getMinutes()) * 7) / 6) + 34.5;
+  ((((((new Date(dateStart)).getHours() - 8) * 56.5) +
+  (new Date(dateStart)).getMinutes()) * 7) / 6) + 33;
 
 
 const InteractiveArea = ({ floors, ...props }) => {
@@ -72,7 +86,29 @@ const InteractiveArea = ({ floors, ...props }) => {
           {previousRoomsCount += el.rooms.length}
           {el.rooms.map((room, j) => (
             <g key={room.id} transform={`translate(0, ${j * 52})`}>
-              <rect x="0" y="0" width="100%" height="28" className="timeline__empty-track" />
+              <rect
+                x="0"
+                y="0"
+                width="100%"
+                height="28"
+                className="timeline__empty-track"
+                onMouseMove={(e) => {
+                  if (e.clientX > calculateXCordForEvent(currentDateTime) + 245) {
+                    props.handleTimelineMouseIn(room.id);
+                    props.handleTimelineMouseMove(e.clientX);
+                  } else {
+                    props.handleTimelineMouseOut();
+                  }
+                }}
+                onClick={(e) => {
+                  if (e.clientX > calculateXCordForEvent(currentDateTime) + 245) {
+                    props.handleTimelineClick(cordToTime(e.clientX));
+                  }
+                }}
+                onMouseOut={() => { props.handleTimelineMouseOut(); }}
+              />
+              {props.hoveredRoomId === room.id &&
+              <rect className="timeline__pointer" rx="2" ry="2" x="0" y="0" transform={`translate(${props.pointerXCord}, 0)`} />}
               {room.events.map((event) => {
                 let width = calculateXCordForEvent(event.dateEnd) -
                 calculateXCordForEvent(event.dateStart);
@@ -128,10 +164,16 @@ const InteractiveArea = ({ floors, ...props }) => {
 InteractiveArea.propTypes = {
   floors: PropTypes.arrayOf(PropTypes.object),
   toggleSummaryDialog: PropTypes.func.isRequired,
+  handleTimelineMouseIn: PropTypes.func.isRequired,
+  handleTimelineMouseOut: PropTypes.func.isRequired,
+  handleTimelineMouseMove: PropTypes.func.isRequired,
+  handleTimelineClick: PropTypes.func.isRequired,
+  hoveredRoomId: PropTypes.string,
 };
 
 InteractiveArea.defaultProps = {
   floors: [],
+  hoveredRoomId: '',
 };
 
 export default InteractiveArea;

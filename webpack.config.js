@@ -1,10 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = process.env.NODE_ENV;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
+const config = {
   entry: './client/index.js',
   output: { path: `${__dirname}/public`, filename: 'bundle.js' },
   resolve: {extensions: ['.js','.jsx']},
@@ -49,3 +50,14 @@ module.exports = {
       }),
     ],
 };
+
+if (env === 'production') {
+  config.plugins.push(new UglifyJsPlugin({
+    sourceMap: true,
+  }));
+  config.plugins.push(new webpack.DefinePlugin({
+  'process.env.NODE_ENV': JSON.stringify('production')
+  }));
+}
+
+module.exports = config;

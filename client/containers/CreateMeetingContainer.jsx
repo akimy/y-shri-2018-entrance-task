@@ -14,34 +14,14 @@ class CreateMeetingContainer extends Component {
       selectingMembers: false,
       selectedUsers: [],
       filteredUsers: [],
-      recommendedRooms: [
-        {
-          title: 'Поле непаханное',
-          floor: 2,
-          id: 1,
-          capacity: 8,
-        },
-        {
-          title: 'Голубая луна',
-          floor: 2,
-          id: 2,
-        },
-        {
-          title: 'Темная пещера',
-          floor: 2,
-          id: 3,
-        },
-        {
-          title: 'Тёмная башня',
-          floor: 5,
-          id: 4,
-        },
-      ],
+      recommendedRooms: [],
       selectedRoom: null,
       theme: '',
       userSearchInput: '',
     };
 
+    this.getRecommendation = this.getRecommendation.bind(this);
+    this.tryToGetRecommendation = this.tryToGetRecommendation.bind(this);
     this.setDate = this.setDate.bind(this);
     this.setTimeStart = this.setTimeStart.bind(this);
     this.setTimeEnd = this.setTimeEnd.bind(this);
@@ -79,53 +59,43 @@ class CreateMeetingContainer extends Component {
     });
   }
 
+  /**
+ * @param {EventDate} date Дата планируемой встречи.
+ * @param {Person[]} members Участники планируемой встречи.
+ * @param {Object} db
+ * @param {Event[]} db.events Список все встреч.
+ * @param {Room[]} db.rooms Список всех переговорок.
+ * @returns {Recommendation[]}
+ */
+
+  getRecommendation() {
+    console.log('RECCOMENDATION');
+  }
+
   setDate(date) {
-    this.setState({ date });
+    this.setState(() => ({ date }), () => {
+      this.tryToGetRecommendation();
+    });
   }
 
   setTimeStart(timeStart) {
-    this.setState({ timeStart });
+    this.setState(() => ({ timeStart }), () => {
+      this.tryToGetRecommendation();
+    });
   }
 
   setTimeEnd(timeEnd) {
-    this.setState({ timeEnd });
-  }
-
-  addUserToSelected(user) {
-    this.setState(state => ({ selectedUsers: state.selectedUsers.concat([user]) }), () => {
-      this.setState({ selectingMembers: false, userSearchInput: '' });
+    this.setState(() => ({ timeEnd }), () => {
+      this.tryToGetRecommendation();
     });
   }
 
-  removeUserFromSelected(id) {
-    const selected = this.state.selectedUsers.filter(user => user.id !== id);
-    this.setState({ selectedUsers: selected });
-  }
-
-  filterUsers(value) {
-    this.setState(() => ({ userSearchInput: value }), () => {
-      const filtered = this.state.users
-        .filter(user => user.login.match(new RegExp(value, 'i')))
-        .filter(matched => this.state.selectedUsers
-          .filter(selected => selected.id === matched.id).length === 0)
-        .sort((a, b) => (a.login > b.login ? 1 : -1));
-
-      this.setState({ filteredUsers: filtered });
-    });
-  }
-
-  declineCreating() {
-    this.props.changeStageTo('workplace');
-  }
-
-  acceptCreating() {
-    this.props.toggleModalCreated();
-    this.props.changeStageTo('workplace');
-  }
-
-  selectingMembersTurningOn() {
-    this.filterUsers('');
-    this.setState({ selectingMembers: true });
+  tryToGetRecommendation() {
+    const { selectedUsers, timeStart, timeEnd } = this.state;
+    if ((selectedUsers.length !== 0) &&
+    (((timeEnd.getHours() - timeStart.getHours()) > 0))) {
+      this.getRecommendation();
+    }
   }
 
   selectingMembersTurningOff() {
@@ -146,6 +116,49 @@ class CreateMeetingContainer extends Component {
 
   cancelSelectedRoom() {
     this.setState({ selectedRoom: null });
+  }
+
+  acceptCreating() {
+    if (this.state.selectedRoom) {
+      this.props.toggleModalCreated();
+      this.props.changeStageTo('workplace');
+    }
+  }
+
+  selectingMembersTurningOn() {
+    this.filterUsers('');
+    this.setState({ selectingMembers: true });
+  }
+
+  declineCreating() {
+    this.props.changeStageTo('workplace');
+  }
+
+  filterUsers(value) {
+    this.setState(() => ({ userSearchInput: value }), () => {
+      const filtered = this.state.users
+        .filter(user => user.login.match(new RegExp(value, 'i')))
+        .filter(matched => this.state.selectedUsers
+          .filter(selected => selected.id === matched.id).length === 0)
+        .sort((a, b) => (a.login > b.login ? 1 : -1));
+
+      this.setState({ filteredUsers: filtered });
+    });
+  }
+
+  removeUserFromSelected(id) {
+    const selected = this.state.selectedUsers.filter(user => user.id !== id);
+    this.setState(() => ({ selectedUsers: selected }), () => {
+      this.tryToGetRecommendation();
+    });
+  }
+
+  addUserToSelected(user) {
+    this.setState(state => ({ selectedUsers: state.selectedUsers.concat([user]) }), () => {
+      this.setState(() => ({ selectingMembers: false, userSearchInput: '' }), () => {
+        this.tryToGetRecommendation();
+      });
+    });
   }
 
   render() {

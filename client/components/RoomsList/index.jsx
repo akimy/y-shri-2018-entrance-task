@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './RoomsList.scss';
 
-const RoomsList = ({ floors }) => {
+const RoomsList = ({ floors, hoveredRoomId }) => {
   const floorsJsx = floors.map(el => (
     <div key={el.floor} className="floor">
       <div className="floor__number">{`${el.floor} ЭТАЖ`}</div>
       {el.rooms.map(room => (
         <div key={room.id}>
-          <div className="floor__room-title">{room.title}</div>
+          <div className={hoveredRoomId === room.id ? 'floor__room-title_hovered' : 'floor__room-title'}>
+            {room.title}
+          </div>
           <div className="floor__room-capacity">{`до ${room.capacity} человек`}</div>
         </div>))}
     </div>
@@ -21,7 +23,12 @@ const RoomsList = ({ floors }) => {
 };
 
 RoomsList.propTypes = {
+  hoveredRoomId: PropTypes.string,
   floors: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+RoomsList.defaultProps = {
+  hoveredRoomId: null,
 };
 
 export default RoomsList;

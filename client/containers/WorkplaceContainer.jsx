@@ -7,8 +7,15 @@ class WorkplaceContainer extends Component {
     super();
     this.state = {
       floors: [],
+      lastTimeInteractive: +new Date(),
+      pointerXCord: null,
+      hoveredRoomId: null,
     };
 
+    this.handleTimelineClick = this.handleTimelineClick.bind(this);
+    this.handleTimelineMouseIn = this.handleTimelineMouseIn.bind(this);
+    this.handleTimelineMouseOut = this.handleTimelineMouseOut.bind(this);
+    this.handleTimelineMouseMove = this.handleTimelineMouseMove.bind(this);
     this.morphRoomsToFloorsArray = this.morphRoomsToFloorsArray.bind(this);
   }
 
@@ -37,6 +44,7 @@ class WorkplaceContainer extends Component {
         }
       }`,
     }).then((res) => {
+      this.setState(() => ({ rooms: res.data.rooms }));
       this.morphRoomsToFloorsArray(res.data.rooms);
     });
   }
@@ -68,11 +76,38 @@ class WorkplaceContainer extends Component {
     this.setState({ floors });
   }
 
+  handleTimelineMouseIn(roomId) {
+    this.setState({ hoveredRoomId: roomId });
+  }
+
+  handleTimelineMouseOut() {
+    this.setState({ hoveredRoomId: null });
+  }
+
+  handleTimelineMouseMove(xCord) {
+    // if ((+new Date() - this.state.lastTimeInteractive) < 2000) {
+    // console.log('true');
+    // this.setState(() => ({ lastTimeInteractive: +new Date() }), () => {
+    this.setState({ pointerXCord: (xCord - 245) });
+    // });
+    // } else {
+    //  console.log('false');
+    // }
+  }
+
+  handleTimelineClick(date) {
+    console.log(date);
+  }
+
   render() {
     return (
       <Workplace
         {...this.state}
         {...this.props}
+        handleTimelineMouseIn={this.handleTimelineMouseIn}
+        handleTimelineMouseOut={this.handleTimelineMouseOut}
+        handleTimelineMouseMove={this.handleTimelineMouseMove}
+        handleTimelineClick={this.handleTimelineClick}
       />
     );
   }

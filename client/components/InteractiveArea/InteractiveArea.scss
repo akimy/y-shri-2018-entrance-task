@@ -31,7 +31,7 @@
 }
 
 .timeline__hour-label {
-    min-width: 70px;
+    min-width: 66px;
     text-align: center;
     font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 11px;
@@ -91,4 +91,12 @@
 
 .timeline__empty-track {
     fill: white;
+    cursor: none;
+}
+
+.timeline__pointer {
+    width: 57px;
+    height: 28px;
+    fill: #2B50FD;
+    pointer-events : none;
 }

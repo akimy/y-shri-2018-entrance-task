@@ -38,7 +38,6 @@ class DatePick extends Component {
                 onMouseOver={(e) => { e.target.parentNode.style.boxShadow = 'inset 0 0 0 2px rgba(0, 125, 255, 0.25)'; }}
                 onMouseOut={(e) => { e.target.parentNode.style.boxShadow = 'inset 0 0 0 2px #e9ecef'; }}
                 onFocus={() => { this.datePickerRef.openDialog(); }}
-                onBlur={(e) => { e.target.parentNode.style.boxShadow = 'inset 0 0 0 2px #e9ecef'; }}
               />
             </MuiThemeProvider>
             <div className="calendar-input__wrapper" title="Выбор даты">

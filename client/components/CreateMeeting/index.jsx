@@ -89,7 +89,11 @@ const CreateMeeting = props => (
         </div>
       </div>
     </div>
-    <CreateMeetingFooter accept={props.acceptCreating} decline={props.declineCreating} />
+    <CreateMeetingFooter
+      ready={!!props.selectedRoom}
+      accept={props.acceptCreating}
+      decline={props.declineCreating}
+    />
   </section>
 );
 
