@@ -6,9 +6,10 @@
     align-items: center;
     box-shadow: 0 1px 0 0 #e9ecef;
 }
-// Ленинградская 67, п.1 - 16
+
 .calendar__icon-wrapper {
     display: flex;
+    user-select: none;
     align-items: center;
     background-color: $faded;
     border-radius: 100px;
@@ -34,6 +35,20 @@
 
 .calendar__current-date-text {
     @extend %font-bold;
+    display: flex;
+    align-items: center;
     font-size: 15px;
-    margin: 0 12px;
+    margin: auto;
+    min-height: 35px;
+}
+
+.calendar__hidden-instance {
+    position: absolute;
+    visibility: hidden;
+    z-index: -1;
+}
+
+.calendar__current-date-container {
+    display: flex;
+    min-width: 130px;
 }

@@ -47,6 +47,9 @@ const CreateMeeting = props => (
             onChange={props.handleChangeTheme}
           />
           <DatePick
+            dateStart={props.date}
+            timeStart={props.timeStart}
+            timeEnd={props.timeEnd}
             setDate={props.setDate}
             setTimeStart={props.setTimeStart}
             setTimeEnd={props.setTimeEnd}
@@ -94,7 +97,7 @@ const CreateMeeting = props => (
       </div>
     </div>
     <CreateMeetingFooter
-      ready={!!props.selectedRoom}
+      ready={!!props.selectedRoom && (props.selectedUsers.length !== 0)}
       accept={props.acceptCreating}
       decline={props.declineCreating}
     />
@@ -128,6 +131,9 @@ CreateMeeting.propTypes = {
   userSearchInput: PropTypes.string.isRequired,
   handleFocusList: PropTypes.func.isRequired,
   listRef: PropTypes.func.isRequired,
+  timeStart: PropTypes.instanceOf(Date).isRequired,
+  timeEnd: PropTypes.instanceOf(Date).isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
 };
 
 CreateMeeting.defaultProps = {

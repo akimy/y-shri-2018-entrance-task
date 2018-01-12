@@ -8,7 +8,12 @@ import './Workplace.scss';
 const Workplace = props => (
   <section className="workplace">
     <div className="workplace__left-column">
-      <Calendar />
+      <Calendar
+        setCalendarDate={props.setCalendarDate}
+        handleCalendarLeftArrowClick={props.handleCalendarLeftArrowClick}
+        handleCalendarRightArrowClick={props.handleCalendarRightArrowClick}
+        calendarDate={props.calendarDate}
+      />
       <RoomsList floors={props.floors} hoveredRoomId={props.hoveredRoomId} />
     </div>
     <div className="workplace__right-column">
@@ -21,6 +26,7 @@ const Workplace = props => (
         handleTimelineClick={props.handleTimelineClick}
         hoveredRoomId={props.hoveredRoomId}
         pointerXCord={props.pointerXCord}
+        calendarDate={props.calendarDate}
       />
     </div>
   </section>
@@ -35,6 +41,10 @@ Workplace.propTypes = {
   handleTimelineClick: PropTypes.func.isRequired,
   hoveredRoomId: PropTypes.string,
   pointerXCord: PropTypes.number,
+  setCalendarDate: PropTypes.func.isRequired,
+  calendarDate: PropTypes.instanceOf(Date).isRequired,
+  handleCalendarLeftArrowClick: PropTypes.func.isRequired,
+  handleCalendarRightArrowClick: PropTypes.func.isRequired,
 };
 
 Workplace.defaultProps = {

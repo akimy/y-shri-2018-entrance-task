@@ -2,14 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './InteractiveArea.scss';
 
-const currentDateTime = new Date();
+const currentDate = new Date();
 
 /** Display current
  * Function for boundary cases (From 8AM to 11PM)
  * @returns bool
  */
 
-const displayCurrent = () => !(currentDateTime.getHours() < 8 || currentDateTime.getHours() > 24);
+const displayCurrent = (calendar, current) => {
+  if (current.getHours() < 8 || current.getHours() > 24) {
+    return false;
+  }
+  const currDateValue = current.getDate() + current.getMonth() * 30 + current.getFullYear() * 360;
+  const calendarDateValue = calendar.getDate() + calendar.getMonth() * 30 +
+   calendar.getFullYear() * 360;
+  return currDateValue === calendarDateValue;
+};
 
 
 /**
@@ -17,9 +25,9 @@ const displayCurrent = () => !(currentDateTime.getHours() < 8 || currentDateTime
  * @param {float} x
  * @returns {Date} event date
  */
-const cordToTime = (x) => {
+const cordToTime = (x, calendarDate) => {
   const hour = 0.0173913 * x + 3.23913;
-  const date = new Date();
+  const date = calendarDate;
   date.setHours(0);
   date.setMinutes(0);
   return new Date(date.getTime() + hour * 60 * 60 * 1000);
@@ -39,12 +47,43 @@ const calculateXCordForEvent = dateStart =>
   ((new Date(dateStart).getHours() - 8) * 57.5) +
   (new Date(dateStart).getMinutes() * 57.5 / 60) + 28.75;
 
+const calculatePointStatus = (curr, date) => {
+  const currDateValue = curr.getDate() + curr.getMonth() * 30 + curr.getFullYear() * 360;
+  const calendarDateValue = date.getDate() + date.getMonth() * 30 + date.getFullYear() * 360;
+
+  if (currDateValue > calendarDateValue) {
+    return 'before';
+  } else if (currDateValue < calendarDateValue) {
+    return 'after';
+  }
+  return 'today';
+};
+
+const getPermissionForCreateEvent = (date, pointStatus, clientX) =>
+  ((clientX > calculateXCordForEvent(date) + 245) && pointStatus === 'today') && clientX < 1140
+   || (pointStatus === 'after' && clientX < 1140);
+
+const getTimeLineLabelClass = (pointStatus, val) => {
+  switch (pointStatus) {
+    case 'before': return 'timeline__hour-label_faded';
+    case 'after': return 'timeline__hour-label';
+    case 'today': {
+      if (val > new Date().getHours()) {
+        return 'timeline__hour-label';
+      }
+      return 'timeline__hour-label_faded';
+    }
+    default: return '';
+  }
+};
+
 const InteractiveArea = ({ floors, ...props }) => {
-  const [hour, min] = [currentDateTime.getHours(), currentDateTime.getMinutes()];
-  const leftMarginForCurrent = calculateXCordForEvent(currentDateTime) - 25;
+  const leftMarginForCurrent = calculateXCordForEvent(currentDate) - 25;
+
+  const pointStatus = calculatePointStatus(currentDate, props.calendarDate);
 
   const timeLineElements = [...Array(25).keys()].splice(8, 16).map(val => (
-    <div key={val} className={val > hour ? 'timeline__hour-label' : 'timeline__hour-label_faded'}>
+    <div key={val} className={getTimeLineLabelClass(pointStatus, val)}>
       {`${val}:00`}
     </div>));
 
@@ -60,9 +99,9 @@ const InteractiveArea = ({ floors, ...props }) => {
   ));
 
   const currentLine = (<line
-    x1={calculateXCordForEvent(currentDateTime)}
+    x1={calculateXCordForEvent(currentDate)}
     y1="23"
-    x2={calculateXCordForEvent(currentDateTime)}
+    x2={calculateXCordForEvent(currentDate)}
     y2="100%"
     className="timeline__current-line"
   />);
@@ -83,30 +122,33 @@ const InteractiveArea = ({ floors, ...props }) => {
       {floors.map((el, i) => (
         <g key={el.floor} transform={`translate(0, ${(i * 43) + (52 * previousRoomsCount)})`}>
           {previousRoomsCount += el.rooms.length}
-          {el.rooms.map((room, j) => (
-            <g key={room.id} transform={`translate(0, ${j * 52})`}>
-              <rect
-                x="0"
-                y="0"
-                width="100%"
-                height="28"
-                className="timeline__empty-track"
-                onMouseMove={(e) => {
-                  if (e.clientX > calculateXCordForEvent(currentDateTime) + 245) {
-                    props.handleTimelineMouseIn(room.id);
-                    props.handleTimelineMouseMove(e.clientX);
-                  } else {
-                    props.handleTimelineMouseOut();
+          {el.rooms.map((room, j) => {
+            const pointerEnabled = props.hoveredRoomId === room.id && props.pointerXCord < 900 && pointStatus !== 'before';
+
+            return (
+              <g key={room.id} transform={`translate(0, ${j * 52})`}>
+                <rect
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="28"
+                  className="timeline__empty-track"
+                  onMouseMove={(e) => {
+                    if (getPermissionForCreateEvent(currentDate, pointStatus, e.clientX)) {
+                      props.handleTimelineMouseIn(room.id);
+                      props.handleTimelineMouseMove(e.clientX);
+                    } else {
+                      props.handleTimelineMouseOut();
+                    }
+                }}
+                  onClick={(e) => {
+                  if (getPermissionForCreateEvent(currentDate, pointStatus, e.clientX)) {
+                    props.handleTimelineClick(cordToTime(e.clientX, props.calendarDate), room);
                   }
                 }}
-                onClick={(e) => {
-                  if (e.clientX > calculateXCordForEvent(currentDateTime) + 245) {
-                    props.handleTimelineClick(cordToTime(e.clientX));
-                  }
-                }}
-                onMouseOut={() => { props.handleTimelineMouseOut(); }}
-              />
-              {room.events.map((event) => {
+                  onMouseOut={() => { props.handleTimelineMouseOut(); }}
+                />
+                {room.events.map((event) => {
                 let width = calculateXCordForEvent(event.dateEnd) -
                 calculateXCordForEvent(event.dateStart);
 
@@ -116,7 +158,7 @@ const InteractiveArea = ({ floors, ...props }) => {
                 }
                 const startEventCord = calculateXCordForEvent(event.dateStart);
                 return (
-                width > 0 &&
+                ((width > 0) && (calculatePointStatus(props.calendarDate, new Date(event.dateStart)) === 'today')) &&
                 <rect
                   key={event.id}
                   x={startEventCord}
@@ -133,13 +175,14 @@ const InteractiveArea = ({ floors, ...props }) => {
                   onClick={e => props.toggleSummaryDialog(e.target.getBoundingClientRect(), event)}
                 />);
               })}
-              {props.hoveredRoomId === room.id && props.pointerXCord < 1025 &&
-              <rect className="timeline__pointer" rx="2" ry="2" x="0" y="0" transform={`translate(${props.pointerXCord}, 0)`} />}
-              {props.hoveredRoomId === room.id &&
-              <line x1="28.5" x2="28.5" y1="8" y2="20" strokeWidth="2px" transform={`translate(${props.pointerXCord}, 0)`} stroke="white" />}
-              {props.hoveredRoomId === room.id &&
-              <line x1="22" x2="35" y1="14" y2="14" strokeWidth="2px" transform={`translate(${props.pointerXCord}, 0)`} stroke="white" />}
-            </g>))}
+                {pointerEnabled &&
+                <rect className="timeline__pointer" rx="2" ry="2" x="0" y="0" transform={`translate(${props.pointerXCord}, 0)`} />}
+                {pointerEnabled &&
+                <line className="timeline__pointer-icon" x1="28.5" x2="28.5" y1="8" y2="20" strokeWidth="2px" transform={`translate(${props.pointerXCord}, 0)`} stroke="white" />}
+                {pointerEnabled &&
+                <line className="timeline__pointer-icon" x1="22" x2="35" y1="14" y2="14" strokeWidth="2px" transform={`translate(${props.pointerXCord}, 0)`} stroke="white" />}
+              </g>);
+              })}
         </g>))}
     </g>
   );
@@ -147,10 +190,10 @@ const InteractiveArea = ({ floors, ...props }) => {
   return (
     <div className="interactive-area">
       <div className="timeline">
-        {displayCurrent() &&
+        {displayCurrent(props.calendarDate, currentDate) &&
         <div className="timeline__current-badge-container" style={{ left: `${leftMarginForCurrent}px` }}>
           <span className="timeline__current-badge-text">
-            {`${hour}:${min < 10 ? '0' : ''}${min}`}
+            {`${currentDate.getHours()}:${currentDate.getMinutes() < 10 ? '0' : ''}${currentDate.getMinutes()}`}
           </span>
         </div>}
         {timeLineElements}
@@ -158,7 +201,7 @@ const InteractiveArea = ({ floors, ...props }) => {
       <div className="graph-container">
         <svg className="graph">
           {floorsTracks}
-          {displayCurrent() && currentLine}
+          {displayCurrent(props.calendarDate, currentDate) && currentLine}
           {verticalLines}
         </svg>
       </div>
@@ -168,6 +211,7 @@ const InteractiveArea = ({ floors, ...props }) => {
 
 InteractiveArea.propTypes = {
   floors: PropTypes.arrayOf(PropTypes.object),
+  calendarDate: PropTypes.instanceOf(Date).isRequired,
   toggleSummaryDialog: PropTypes.func.isRequired,
   handleTimelineMouseIn: PropTypes.func.isRequired,
   handleTimelineMouseOut: PropTypes.func.isRequired,

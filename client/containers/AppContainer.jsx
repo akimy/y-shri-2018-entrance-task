@@ -8,7 +8,13 @@ class AppContainer extends Component {
       modalCreated: false,
       summaryDialogOpened: false,
       summaryDialogContent: {},
-      stage: 'workplace',
+      stage: {
+        name: 'workplace',
+        payload: {
+          purpose: '',
+          body: '',
+        },
+      },
       modalCreatedContent: '',
     };
 
@@ -27,8 +33,8 @@ class AppContainer extends Component {
     this.setState(state => (state.modalCreated ? { modalCreated: false } : { modalCreated: true }));
   }
 
-  changeStageTo(nextStage) {
-    this.setState({ stage: nextStage });
+  changeStageTo(nextStageName, payload) {
+    this.setState({ stage: { name: nextStageName, payload } });
   }
 
   toggleSummaryDialog(coords, event) {

@@ -36,7 +36,7 @@ class DatePick extends Component {
             <MuiThemeProvider muiTheme={muiTheme}>
               <DatePicker
                 ref={ref => this.datePickerRef = ref}
-                defaultDate={new Date()}
+                defaultDate={this.props.dateStart}
                 minDate={new Date()}
                 onChange={(invalid, date) => { this.props.setDate(date); }}
                 mode="landscape"
@@ -68,7 +68,7 @@ class DatePick extends Component {
               ref={ref => this.timeStart = ref}
               id="time-start"
               format="24hr"
-              defaultTime={new Date()}
+              defaultTime={this.props.timeStart}
               onChange={(first, time) => this.props.setTimeStart(time)}
               cancelLabel="Отмена"
               autoOk
@@ -91,7 +91,7 @@ class DatePick extends Component {
               ref={ref => this.timeEnd = ref}
               id="time-end"
               format="24hr"
-              defaultTime={new Date((new Date()).getTime() + (60 * (60 * 1000)))}
+              defaultTime={this.props.timeEnd}
               onChange={(first, time) => this.props.setTimeEnd(time)}
               cancelLabel="Отмена"
               autoOk
@@ -105,9 +105,14 @@ class DatePick extends Component {
     );
   }
 }
+
 DatePick.propTypes = {
   setDate: PropTypes.func.isRequired,
   setTimeStart: PropTypes.func.isRequired,
   setTimeEnd: PropTypes.func.isRequired,
+  dateStart: PropTypes.instanceOf(Date).isRequired,
+  timeStart: PropTypes.instanceOf(Date).isRequired,
+  timeEnd: PropTypes.instanceOf(Date).isRequired,
 };
+
 export default DatePick;

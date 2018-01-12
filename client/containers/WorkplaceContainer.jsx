@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import fetch from '../shared/apolloFetch';
 import Workplace from '../components/Workplace';
 
@@ -11,14 +12,19 @@ class WorkplaceContainer extends Component {
       hoveredRoomId: null,
     };
 
+    this.setCalendarDate = this.setCalendarDate.bind(this);
     this.handleTimelineClick = this.handleTimelineClick.bind(this);
     this.handleTimelineMouseIn = this.handleTimelineMouseIn.bind(this);
     this.handleTimelineMouseOut = this.handleTimelineMouseOut.bind(this);
     this.handleTimelineMouseMove = this.handleTimelineMouseMove.bind(this);
     this.morphRoomsToFloorsArray = this.morphRoomsToFloorsArray.bind(this);
+    this.handleCalendarLeftArrowClick = this.handleCalendarLeftArrowClick.bind(this);
+    this.handleCalendarRightArrowClick = this.handleCalendarRightArrowClick.bind(this);
   }
 
   componentWillMount() {
+    this.setState({ calendarDate: new Date() });
+
     fetch({
       query: `{
         rooms {
@@ -45,6 +51,11 @@ class WorkplaceContainer extends Component {
     }).then((res) => {
       this.setState(() => ({ rooms: res.data.rooms }));
       this.morphRoomsToFloorsArray(res.data.rooms);
+    });
+  }
+
+  setCalendarDate(calendarDate) {
+    this.setState(() => ({ calendarDate }), () => {
     });
   }
 
@@ -87,8 +98,24 @@ class WorkplaceContainer extends Component {
     this.setState({ pointerXCord: (xCord - 245) });
   }
 
-  handleTimelineClick(date) {
-    console.log(date);
+  handleTimelineClick(date, room) {
+    this.props.changeStageTo('createMeeting', {
+      purpose: 'createFromDate',
+      body: { date, room },
+    });
+  }
+
+  handleCalendarLeftArrowClick() {
+    this.setState(state => ({
+      calendarDate: new Date((state.calendarDate).getTime()
+      - 1000 * 60 * 60 * 24),
+    }));
+  }
+  handleCalendarRightArrowClick() {
+    this.setState(state => ({
+      calendarDate: new Date((state.calendarDate).getTime()
+      + 1000 * 60 * 60 * 24),
+    }));
   }
 
   render() {
@@ -96,13 +123,21 @@ class WorkplaceContainer extends Component {
       <Workplace
         {...this.state}
         {...this.props}
+        setCalendarDate={this.setCalendarDate}
         handleTimelineMouseIn={this.handleTimelineMouseIn}
         handleTimelineMouseOut={this.handleTimelineMouseOut}
         handleTimelineMouseMove={this.handleTimelineMouseMove}
         handleTimelineClick={this.handleTimelineClick}
+        handleCalendarLabelClick={this.handleCalendarLabelClick}
+        handleCalendarLeftArrowClick={this.handleCalendarLeftArrowClick}
+        handleCalendarRightArrowClick={this.handleCalendarRightArrowClick}
       />
     );
   }
 }
+
+WorkplaceContainer.propTypes = {
+  changeStageTo: PropTypes.func.isRequired,
+};
 
 export default WorkplaceContainer;

@@ -54,11 +54,27 @@ class CreateMeetingContainer extends Component {
       this.setState({ users: res.data.users });
     });
 
-    this.setState({
-      date: new Date(),
-      timeStart: new Date(),
-      timeEnd: new Date((new Date()).getTime() + (60 * (60 * 1000))),
-    });
+    const { body, purpose } = this.props.stage.payload;
+    if (purpose === 'createFromDate') {
+      this.setState({
+        date: new Date(body.date),
+        timeStart: new Date(body.date),
+        timeEnd: new Date((new Date(body.date)).getTime() + (60 * (60 * 1000))),
+        selectedRoom: {
+          date: {
+            start: new Date(body.date).getTime(),
+            end: new Date(body.date).getTime() + (60 * (60 * 1000)),
+          },
+          room: body.room,
+        },
+      });
+    } else if (purpose === 'createNew') {
+      this.setState({
+        date: new Date(),
+        timeStart: new Date(),
+        timeEnd: new Date((new Date()).getTime() + (60 * (60 * 1000))),
+      });
+    }
   }
 
   /**
@@ -87,7 +103,7 @@ class CreateMeetingContainer extends Component {
       } else {
         const sortedRooms = freeRooms.sort((first, second) =>
           (this.countFloorSteps(first, members) > this.countFloorSteps(second, members) ? 1 : -1));
-        sortedRooms.splice(0, 3).forEach((room) => {
+        sortedRooms.forEach((room) => {
           recommendations.push({ date: { start: date.start, end: date.end }, room, swap: null });
         });
       }
@@ -242,7 +258,7 @@ class CreateMeetingContainer extends Component {
   }
 
   declineCreating() {
-    this.props.changeStageTo('workplace');
+    this.props.changeStageTo('workplace', '');
   }
 
   filterUsers(value) {
@@ -267,7 +283,13 @@ class CreateMeetingContainer extends Component {
   addUserToSelected(user) {
     this.setState(state => ({ selectedUsers: state.selectedUsers.concat([user]) }), () => {
       this.setState(() => ({ selectingMembers: false, userSearchInput: '' }), () => {
-        this.tryToGetRecommendation();
+        if (this.state.selectedRoom) {
+          if (this.state.selectedRoom.room.capacity < this.state.selectedUsers.length) {
+            this.tryToGetRecommendation();
+          }
+        } else {
+          this.tryToGetRecommendation();
+        }
       });
     });
   }
@@ -299,6 +321,7 @@ class CreateMeetingContainer extends Component {
 CreateMeetingContainer.propTypes = {
   changeStageTo: PropTypes.func.isRequired,
   toggleModalCreated: PropTypes.func.isRequired,
+  stage: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default CreateMeetingContainer;

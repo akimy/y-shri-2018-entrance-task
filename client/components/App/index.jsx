@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './App.scss';
 import Header from '../Header';
-import WorkplaceContainer from '../../containers/WorkplaceContainer';
 import Favicon from './favicon.png';
-import EditMeetingContainer from '../../containers/EditMeetingContainer';
-import CreateMeetingContainer from '../../containers/CreateMeetingContainer';
 import ModalCreated from '../ModalCreated';
 import SummaryDialog from '../SummaryDialog';
+import WorkplaceContainer from '../../containers/WorkplaceContainer';
+import CreateMeetingContainer from '../../containers/CreateMeetingContainer';
+
 
 const App = props => (
   <main
@@ -15,14 +15,17 @@ const App = props => (
     onClick={() => { props.closeSummaryDialog(); }}
   >
     <Header {...props} />
-    {props.stage === 'workplace' && props.modalCreated && props.modalCreatedContent &&
+    {props.stage.name === 'workplace' && props.modalCreated && props.modalCreatedContent &&
     <ModalCreated
       toggleModalCreated={props.toggleModalCreated}
       modalCreatedContent={props.modalCreatedContent}
     />}
-    {props.stage === 'workplace' && <WorkplaceContainer toggleSummaryDialog={props.toggleSummaryDialog} />}
-    {props.stage === 'editMeeting' && <EditMeetingContainer />}
-    {props.stage === 'createMeeting' &&
+    {props.stage.name === 'workplace' &&
+    <WorkplaceContainer
+      toggleSummaryDialog={props.toggleSummaryDialog}
+      changeStageTo={props.changeStageTo}
+    />}
+    {props.stage.name === 'createMeeting' &&
     <CreateMeetingContainer
       {...props}
       setModalCreatedContent={props.setModalCreatedContent}
@@ -33,7 +36,7 @@ const App = props => (
 );
 
 App.propTypes = {
-  stage: PropTypes.string.isRequired,
+  stage: PropTypes.objectOf(PropTypes.any).isRequired,
   modalCreated: PropTypes.bool.isRequired,
   toggleModalCreated: PropTypes.func.isRequired,
   toggleSummaryDialog: PropTypes.func.isRequired,
@@ -48,7 +51,7 @@ App.propTypes = {
   summaryDialogCoords: PropTypes.objectOf(PropTypes.any),
   closeSummaryDialog: PropTypes.func.isRequired,
   setModalCreatedContent: PropTypes.func.isRequired,
-  modalCreatedContent: PropTypes.any.isRequired,
+  changeStageTo: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {

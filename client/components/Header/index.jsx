@@ -13,15 +13,22 @@ const Header = props => (
       className="header__logo"
       src={Logo}
       alt="Логотип компании"
-      onClick={() => { props.changeStageTo('workplace'); }}
+      onClick={() => { props.changeStageTo('workplace', {}); }}
     />
     {/* eslint-enable */}
     <div className="header__button-container">
-      {props.stage === 'workplace' &&
+      {props.stage.name === 'workplace' &&
       <Button
         className="accept-button"
         label="Создать встречу"
-        onClick={{ func: props.changeStageTo, arg: 'createMeeting' }}
+        onClick={{
+          func: props.changeStageTo,
+          arg: ['createMeeting', {
+            purpose: 'createNew',
+            body: null,
+          }],
+        }
+      }
       /> }
     </div>
   </header>
@@ -29,7 +36,7 @@ const Header = props => (
 
 Header.propTypes = {
   changeStageTo: PropTypes.func.isRequired,
-  stage: PropTypes.string.isRequired,
+  stage: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Header;
