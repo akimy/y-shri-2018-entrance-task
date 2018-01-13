@@ -39,7 +39,7 @@ class DatePick extends Component {
                 defaultDate={this.props.dateStart}
                 minDate={new Date()}
                 onChange={(invalid, date) => { this.props.setDate(date); }}
-                mode="landscape"
+                mode="portrait"
                 locale="ru-RU"
                 DateTimeFormat={DateTimeFormat}
                 cancelLabel="Отмена"

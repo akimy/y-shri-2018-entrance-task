@@ -8,7 +8,7 @@ import { monthsPlural } from '../../shared/months';
 const ModalCreated = ({ toggleModalCreated, modalCreatedContent }) => {
   const start = new Date(modalCreatedContent.dateStart);
   const end = new Date(modalCreatedContent.dateEnd);
-  const timeString = `${start.getDay()} ${monthsPlural[start.getMonth()]},
+  const timeString = `${start.getDate()} ${monthsPlural[start.getMonth()]},
   ${start.getHours()}:${start.getMinutes() < 10 ? '0' : ''}${start.getMinutes()} – ${end.getHours()}:${end.getMinutes() < 10 ? '0' : ''}${end.getMinutes()}`;
 
   return (

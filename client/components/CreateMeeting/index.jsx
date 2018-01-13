@@ -1,14 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CreateMeetingFooter from '../CreateMeetingFooter';
+import EditMeetingFooter from '../EditMeetingFooter';
 import InputField from '../InputField';
 import DatePick from '../DatePick';
 import ChosedMembers from '../ChosedMembers';
 import RecommendedRooms from '../RecommendedRooms';
 import SelectedRoom from '../SelectedRoom';
 import SelectMembersScroll from '../SelectMembersScroll';
+import ModalDeleteConfirmation from '../ModalDeleteConfirmation';
 import './CreateMeeting.scss';
 import CloseIcon from './close.svg';
+
+
+const getLabel = (purpose) => {
+  switch (purpose) {
+    case 'edit': return 'Редактирование встречи';
+    default: return 'Новая встреча';
+  }
+};
 
 const CreateMeeting = props => (
   <section
@@ -17,10 +27,15 @@ const CreateMeeting = props => (
     () => { props.selectingMembersTurningOff(); }
   }
   >
+    {props.modalDeleteConfirmationOpened &&
+    <ModalDeleteConfirmation
+      closeModalDeleteConfirmation={props.closeModalDeleteConfirmation}
+      acceptDeleting={props.acceptDeleting}
+    />}
     <div className="create-meeting__content-wrapper">
       <div className="create-meeting__content">
         <div className="row">
-          <h3 className="meeting__label">Новая встреча</h3>
+          <h3 className="meeting__label">{getLabel(props.purpose)}</h3>
           <span
             role="button"
             tabIndex="0"
@@ -96,11 +111,20 @@ const CreateMeeting = props => (
         </div>
       </div>
     </div>
+    {props.purpose !== 'edit' &&
     <CreateMeetingFooter
-      ready={!!props.selectedRoom && (props.selectedUsers.length !== 0)}
+      ready={!!props.selectedRoom && (props.selectedUsers.length !== 0) && (props.theme !== '')}
       accept={props.acceptCreating}
       decline={props.declineCreating}
-    />
+    />}
+    {props.purpose === 'edit' &&
+    <EditMeetingFooter
+      showDeleteConfirmation={props.showDeleteConfirmation}
+      ready={!!props.selectedRoom && (props.selectedUsers.length !== 0) && (props.theme !== '')}
+      accept={props.acceptCreating}
+      decline={props.declineCreating}
+    />}
+
   </section>
 );
 
@@ -134,6 +158,10 @@ CreateMeeting.propTypes = {
   timeStart: PropTypes.instanceOf(Date).isRequired,
   timeEnd: PropTypes.instanceOf(Date).isRequired,
   date: PropTypes.instanceOf(Date).isRequired,
+  closeModalDeleteConfirmation: PropTypes.func.isRequired,
+  acceptDeleting: PropTypes.func.isRequired,
+  showDeleteConfirmation: PropTypes.func.isRequired,
+  modalDeleteConfirmationOpened: PropTypes.bool.isRequired,
 };
 
 CreateMeeting.defaultProps = {

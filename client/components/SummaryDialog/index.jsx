@@ -29,18 +29,18 @@ const SummaryDialog = (props) => {
   const end = new Date(props.dateEnd);
 
   const dateString = (
-    <div className="summary-dialog__date">{`${start.getDay()} ${months[start.getMonth()]} 
+    <div className="summary-dialog__date">{`${start.getDate()} ${months[start.getMonth()]} 
     ${start.getHours()}:${start.getMinutes() < 10 ? '0' : ''}${start.getMinutes()}–
     ${end.getHours()}:${end.getMinutes() < 10 ? '0' : ''}${end.getMinutes()} · ${props.room.title}`}
     </div>);
 
   return (
     <div
+      role="dialog"
       className="summary-dialog"
       style={{ top: y, left: x }}
       onClick={(e) => {
-      e.stopPropagation();
-        console.log('Lol!');
+        e.stopPropagation();
       }}
     >
       <div className="summary-dialog__span-container">
@@ -73,8 +73,8 @@ const SummaryDialog = (props) => {
             className="summary-dialog__edit-icon-wrapper"
             title="Редактировать встречу"
             onClick={(e) => {
-            e.stopPropagation();
-              console.log('Lol!');
+              e.stopPropagation();
+              props.handleEditMeeting();
             }}
           >
             <img className="summary-dialog__edit-icon" src={EditIcon} alt="Редактировать встречу" />
@@ -92,6 +92,7 @@ SummaryDialog.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   room: PropTypes.objectOf(PropTypes.any).isRequired,
   title: PropTypes.string.isRequired,
+  handleEditMeeting: PropTypes.func.isRequired,
 };
 
 export default SummaryDialog;

@@ -31,7 +31,7 @@ const App = props => (
       setModalCreatedContent={props.setModalCreatedContent}
     />}
     {props.summaryDialogOpened &&
-    <SummaryDialog {...props.summaryDialogContent} coords={props.summaryDialogCoords} />}
+    <SummaryDialog {...props.summaryDialogContent} coords={props.summaryDialogCoords} handleEditMeeting={props.handleEditMeeting} />}
   </main>
 );
 
@@ -52,6 +52,7 @@ App.propTypes = {
   closeSummaryDialog: PropTypes.func.isRequired,
   setModalCreatedContent: PropTypes.func.isRequired,
   changeStageTo: PropTypes.func.isRequired,
+  handleEditMeeting: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {

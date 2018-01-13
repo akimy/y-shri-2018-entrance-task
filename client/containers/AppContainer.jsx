@@ -18,6 +18,7 @@ class AppContainer extends Component {
       modalCreatedContent: '',
     };
 
+    this.handleEditMeeting = this.handleEditMeeting.bind(this);
     this.setModalCreatedContent = this.setModalCreatedContent.bind(this);
     this.closeSummaryDialog = this.closeSummaryDialog.bind(this);
     this.toggleSummaryDialog = this.toggleSummaryDialog.bind(this);
@@ -25,9 +26,20 @@ class AppContainer extends Component {
     this.changeStageTo = this.changeStageTo.bind(this);
   }
 
+
   setModalCreatedContent(content) {
     this.setState({ modalCreatedContent: content.createEvent });
   }
+
+  handleEditMeeting() {
+    this.setState(() => ({ summaryDialogOpened: false }), () => {
+      this.changeStageTo('createMeeting', {
+        purpose: 'edit',
+        body: this.state.summaryDialogContent,
+      });
+    });
+  }
+
 
   toggleModalCreated() {
     this.setState(state => (state.modalCreated ? { modalCreated: false } : { modalCreated: true }));
@@ -51,6 +63,7 @@ class AppContainer extends Component {
     return (
       <App
         {...this.state}
+        handleEditMeeting={this.handleEditMeeting}
         closeSummaryDialog={this.closeSummaryDialog}
         toggleModalCreated={this.toggleModalCreated}
         toggleSummaryDialog={this.toggleSummaryDialog}

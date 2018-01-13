@@ -19,8 +19,13 @@ class CreateMeetingContainer extends Component {
       userSearchInput: '',
       recommendations: [],
       selectingMembers: false,
+      editingMode: false,
+      modalDeleteConfirmationOpened: false,
     };
 
+    this.closeModalDeleteConfirmation = this.closeModalDeleteConfirmation.bind(this);
+    this.acceptDeleting = this.acceptDeleting.bind(this);
+    this.showDeleteConfirmation = this.showDeleteConfirmation.bind(this);
     this.countFloorSteps = this.countFloorSteps.bind(this);
     this.getRecommendation = this.getRecommendation.bind(this);
     this.tryToGetRecommendation = this.tryToGetRecommendation.bind(this);
@@ -55,7 +60,7 @@ class CreateMeetingContainer extends Component {
     });
 
     const { body, purpose } = this.props.stage.payload;
-    if (purpose === 'createFromDate') {
+    if (purpose === 'createFromTimeline') {
       this.setState({
         date: new Date(body.date),
         timeStart: new Date(body.date),
@@ -73,6 +78,22 @@ class CreateMeetingContainer extends Component {
         date: new Date(),
         timeStart: new Date(),
         timeEnd: new Date((new Date()).getTime() + (60 * (60 * 1000))),
+      });
+    } else if (purpose === 'edit') {
+      this.setState({
+        date: new Date(body.dateStart),
+        timeStart: new Date(body.dateStart),
+        timeEnd: new Date(body.dateEnd),
+        theme: body.title,
+        editingMode: true,
+        selectedUsers: body.users,
+        selectedRoom: {
+          date: {
+            start: new Date(body.dateStart).getTime(),
+            end: new Date(body.dateEnd).getTime(),
+          },
+          room: body.room,
+        },
       });
     }
   }
@@ -93,6 +114,11 @@ class CreateMeetingContainer extends Component {
         (room.events.length === 0 ? true : room.events.reduce((acc, event) => {
           const roomEventStart = new Date(event.dateStart).getTime();
           const roomEventEnd = new Date(event.dateEnd).getTime();
+          if (this.props.stage.payload.purpose === 'edit') {
+            if (this.props.stage.payload.body.id === event.id) {
+              return acc;
+            }
+          }
           if ((date.start > roomEventEnd) || (date.end < roomEventStart)) {
             return acc;
           }
@@ -112,6 +138,7 @@ class CreateMeetingContainer extends Component {
     this.setState({ recommendations });
   }
 
+
   setDate(date) {
     this.setState(() => ({ date }), () => {
       this.tryToGetRecommendation();
@@ -128,6 +155,32 @@ class CreateMeetingContainer extends Component {
     this.setState(() => ({ timeEnd }), () => {
       this.tryToGetRecommendation();
     });
+  }
+
+  closeModalDeleteConfirmation() {
+    this.setState({ modalDeleteConfirmationOpened: false });
+  }
+
+  acceptDeleting() {
+    const variables = {
+      id: this.props.stage.payload.body.id,
+    };
+    fetch({
+      query: `
+      mutation removeEditingEvent($id:ID!){
+        removeEvent(id:$id){
+          id
+          title
+        }
+      }`,
+      variables,
+    }).then(() => {
+      this.props.changeStageTo('workplace', '');
+    });
+  }
+
+  showDeleteConfirmation() {
+    this.setState({ modalDeleteConfirmationOpened: true });
   }
 
   showError(message) {
@@ -298,6 +351,7 @@ class CreateMeetingContainer extends Component {
     return (
       <CreateMeeting
         listRef={el => this.listElement = el}
+        purpose={this.props.stage.payload.purpose}
         {...this.state}
         declineCreating={this.declineCreating}
         acceptCreating={this.acceptCreating}
@@ -313,6 +367,9 @@ class CreateMeetingContainer extends Component {
         setDate={this.setDate}
         setTimeStart={this.setTimeStart}
         setTimeEnd={this.setTimeEnd}
+        closeModalDeleteConfirmation={this.closeModalDeleteConfirmation}
+        acceptDeleting={this.acceptDeleting}
+        showDeleteConfirmation={this.showDeleteConfirmation}
       />
     );
   }
@@ -322,7 +379,7 @@ CreateMeetingContainer.propTypes = {
   changeStageTo: PropTypes.func.isRequired,
   toggleModalCreated: PropTypes.func.isRequired,
   stage: PropTypes.objectOf(PropTypes.any).isRequired,
+  setModalCreatedContent: PropTypes.func.isRequired,
 };
 
 export default CreateMeetingContainer;
-

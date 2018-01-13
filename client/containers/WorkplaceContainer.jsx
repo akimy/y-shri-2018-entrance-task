@@ -39,6 +39,9 @@ class WorkplaceContainer extends Component {
             dateEnd
             room {
               title
+              capacity,
+              floor,
+              id
             }
             users {
               id
@@ -100,7 +103,7 @@ class WorkplaceContainer extends Component {
 
   handleTimelineClick(date, room) {
     this.props.changeStageTo('createMeeting', {
-      purpose: 'createFromDate',
+      purpose: 'createFromTimeline',
       body: { date, room },
     });
   }

@@ -1,0 +1,14 @@
+@import '../../shared/styles';
+
+.edit-meeting__footer {
+    display: flex;
+    flex: 0 0 auto;
+    height: 76px;
+    box-shadow: 0 -1px 0 0 $faded;
+    align-items: center;
+}
+
+.footer__buttons-container {
+    display: flex;
+    margin: auto;
+}

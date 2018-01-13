@@ -48,7 +48,7 @@ class Calendar extends Component {
               minDate={new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30 * 1.5)}
               maxDate={new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30 * 1.5)}
               onChange={(invalid, date) => { this.props.setCalendarDate(date); }}
-              mode="landscape"
+              mode="portrait"
               locale="ru-RU"
               DateTimeFormat={DateTimeFormat}
               cancelLabel="Отмена"
