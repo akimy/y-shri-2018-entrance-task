@@ -26,7 +26,6 @@ class AppContainer extends Component {
     this.changeStageTo = this.changeStageTo.bind(this);
   }
 
-
   setModalCreatedContent(content) {
     this.setState({ modalCreatedContent: content.createEvent });
   }

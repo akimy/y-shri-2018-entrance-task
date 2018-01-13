@@ -9,6 +9,7 @@ import RecommendedRooms from '../RecommendedRooms';
 import SelectedRoom from '../SelectedRoom';
 import SelectMembersScroll from '../SelectMembersScroll';
 import ModalDeleteConfirmation from '../ModalDeleteConfirmation';
+import ModalSwapConfirmation from '../ModalSwapConfirmation';
 import './CreateMeeting.scss';
 import CloseIcon from './close.svg';
 
@@ -32,6 +33,13 @@ const CreateMeeting = props => (
       closeModalDeleteConfirmation={props.closeModalDeleteConfirmation}
       acceptDeleting={props.acceptDeleting}
     />}
+    {props.swapConfirmationOpened &&
+    <ModalSwapConfirmation
+      closeSwapConfirmationModal={props.closeSwapConfirmationModal}
+      confirmEventsSwapAndCreate={props.confirmEventsSwapAndCreate}
+      swapData={props.swapData}
+    />}
+
     <div className="create-meeting__content-wrapper">
       <div className="create-meeting__content">
         <div className="row">
@@ -107,6 +115,8 @@ const CreateMeeting = props => (
               cancelSelectedRoom={props.cancelSelectedRoom}
               date={props.selectedRoom.date}
             /> }
+            {props.error &&
+            <div>{props.error}</div>}
           </div>
         </div>
       </div>
@@ -121,7 +131,7 @@ const CreateMeeting = props => (
     <EditMeetingFooter
       showDeleteConfirmation={props.showDeleteConfirmation}
       ready={!!props.selectedRoom && (props.selectedUsers.length !== 0) && (props.theme !== '')}
-      accept={props.acceptCreating}
+      accept={props.acceptEventEditing}
       decline={props.declineCreating}
     />}
 
@@ -162,6 +172,11 @@ CreateMeeting.propTypes = {
   acceptDeleting: PropTypes.func.isRequired,
   showDeleteConfirmation: PropTypes.func.isRequired,
   modalDeleteConfirmationOpened: PropTypes.bool.isRequired,
+  closeSwapConfirmationModal: PropTypes.func.isRequired,
+  confirmEventsSwapAndCreate: PropTypes.func.isRequired,
+  swapConfirmationOpened: PropTypes.bool.isRequired,
+  acceptEventEditing: PropTypes.func.isRequired,
+  error: PropTypes.string.isRequired,
 };
 
 CreateMeeting.defaultProps = {

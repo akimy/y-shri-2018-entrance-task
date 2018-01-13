@@ -21,8 +21,13 @@ class CreateMeetingContainer extends Component {
       selectingMembers: false,
       editingMode: false,
       modalDeleteConfirmationOpened: false,
+      swapConfirmationOpened: false,
     };
 
+    this.acceptEventEditing = this.acceptEventEditing.bind(this);
+    this.closeSwapConfirmationModal = this.closeSwapConfirmationModal.bind(this);
+    this.confirmEventsSwapAndCreate = this.confirmEventsSwapAndCreate.bind(this);
+    this.showSwapConfirmationModal = this.showSwapConfirmationModal.bind(this);
     this.closeModalDeleteConfirmation = this.closeModalDeleteConfirmation.bind(this);
     this.acceptDeleting = this.acceptDeleting.bind(this);
     this.showDeleteConfirmation = this.showDeleteConfirmation.bind(this);
@@ -65,13 +70,6 @@ class CreateMeetingContainer extends Component {
         date: new Date(body.date),
         timeStart: new Date(body.date),
         timeEnd: new Date((new Date(body.date)).getTime() + (60 * (60 * 1000))),
-        selectedRoom: {
-          date: {
-            start: new Date(body.date).getTime(),
-            end: new Date(body.date).getTime() + (60 * (60 * 1000)),
-          },
-          room: body.room,
-        },
       });
     } else if (purpose === 'createNew') {
       this.setState({
@@ -107,6 +105,7 @@ class CreateMeetingContainer extends Component {
   getRecommendation(date, members, db) {
     const recommendations = [];
     const roomsWithSufficientCapacity = db.rooms.filter(room => room.capacity >= members.length);
+
     if (roomsWithSufficientCapacity.length === 0) {
       this.showError('У нас не существует комнат с достаточным количеством мест для вашей компании');
     } else {
@@ -124,8 +123,53 @@ class CreateMeetingContainer extends Component {
           }
           return false;
         }, true)));
-      if (freeRooms.length === 0) { // All rooms currently is busy
 
+      if (freeRooms.length === 0) { // If all rooms for time interval currently is busy
+        const hashMap = {};
+        let roomsAvailableViaSwap = roomsWithSufficientCapacity.filter((room, i, rooms) =>
+          room.events.filter(event => !((date.start > new Date(event.dateEnd).getTime()) ||
+         (date.end < new Date(event.dateStart).getTime())))
+            .reduce((acc, event) => {
+              const _start = new Date(event.dateStart).getTime();
+              const _end = new Date(event.dateEnd).getTime();
+              const usersCount = event.users.length;
+
+              const targetsForSwap = rooms.filter(_room =>
+                _room.capacity > usersCount).filter(_room =>
+                _room.events.reduce((_acc, _event) => {
+                  const _roomEventStart = new Date(_event.dateStart).getTime();
+                  const _roomEventEnd = new Date(_event.dateEnd).getTime();
+                  if ((_start > _roomEventEnd) || (_end < _roomEventStart)) {
+                    return _acc;
+                  }
+                  return false;
+                }, true));
+
+              const optimizedSwapsList = targetsForSwap.sort((first, second) =>
+                (this.countFloorSteps(first, event.users) >
+                this.countFloorSteps(second, event.users) ? 1 : -1));
+
+              if (optimizedSwapsList.length !== 0) {
+                hashMap[room.id] = { roomId: optimizedSwapsList[0].id, eventId: event.id };
+                return acc;
+              }
+              return false;
+            }, true));
+
+        roomsAvailableViaSwap = roomsAvailableViaSwap.map((el) => {
+          Object.assign(el, { swap: { ...hashMap[el.id] } });
+          return el;
+        });
+
+        if (roomsAvailableViaSwap.length !== 0) {
+          roomsAvailableViaSwap.forEach((room) => {
+            recommendations.push({
+              date: { start: date.start, end: date.end },
+              room,
+              swap: room.swap,
+            });
+          });
+        }
       } else {
         const sortedRooms = freeRooms.sort((first, second) =>
           (this.countFloorSteps(first, members) > this.countFloorSteps(second, members) ? 1 : -1));
@@ -135,9 +179,10 @@ class CreateMeetingContainer extends Component {
       }
     }
 
-    this.setState({ recommendations });
+    this.setState(() => ({ recommendations }), () => {
+      this.setState({ selectedRoom: null });
+    });
   }
-
 
   setDate(date) {
     this.setState(() => ({ date }), () => {
@@ -156,6 +201,11 @@ class CreateMeetingContainer extends Component {
       this.tryToGetRecommendation();
     });
   }
+
+  countFloorSteps(room, users) {
+    return users.reduce((acc, user) => acc += Math.abs(user.homeFloor - room.floor), 0);
+  }
+
 
   closeModalDeleteConfirmation() {
     this.setState({ modalDeleteConfirmationOpened: false });
@@ -187,17 +237,17 @@ class CreateMeetingContainer extends Component {
     this.setState({ error: message });
   }
 
-  countFloorSteps(room, users) {
-    return users.reduce((acc, user) => acc += Math.abs(user.homeFloor - room.floor), 0);
-  }
-
   tryToGetRecommendation() {
-    this.cancelSelectedRoom();
     const {
-      selectedUsers, timeStart, timeEnd, date,
+      selectedUsers,
+      timeStart,
+      timeEnd,
+      date,
     } = this.state;
+
+    // There's at least one selected user & 15 min interval before start and end of the meeting
     if ((selectedUsers.length !== 0) &&
-    (((timeEnd.getHours() - timeStart.getHours()) > 0))) {
+    (((timeEnd.getTime() - timeStart.getTime()) > 9e5))) {
       fetch({
         query: `{
           rooms {
@@ -212,9 +262,11 @@ class CreateMeetingContainer extends Component {
               dateEnd
               users {
                 id
+                homeFloor
               }
               room {
                 id
+                capacity
               }
             }
           }
@@ -242,7 +294,9 @@ class CreateMeetingContainer extends Component {
         this.getRecommendation(eventDate, selectedUsers, db.data);
       });
     } else {
-      this.setState({ recommendations: [] });
+      this.setState(() => ({ selectedRoom: null }), () => {
+        this.setState({ recommendations: [] });
+      });
     }
   }
 
@@ -262,27 +316,82 @@ class CreateMeetingContainer extends Component {
     this.setState({ selectedRoom: recommendation });
   }
 
+  showSwapConfirmationModal(swapData) {
+    this.setState(() => ({ swapData }), () => {
+      this.setState({ swapConfirmationOpened: true });
+    });
+  }
+
+  closeSwapConfirmationModal() {
+    this.setState({ swapConfirmationOpened: false });
+  }
+
+  confirmEventsSwapAndCreate() {
+    const { eventId, roomId } = this.state.selectedRoom.swap;
+    const variables = {
+      eventId,
+      roomId,
+    };
+    fetch({
+      query: `
+      mutation MoveEvent($eventId: ID!,$roomId:ID!) {
+        changeEventRoom(id:$eventId, roomId:$roomId) {
+          id
+        }
+      }`,
+      variables,
+    }).then(() => {
+      this.setState((state) => {
+        const { selectedRoom } = state;
+        selectedRoom.swap = null;
+        return { selectedRoom };
+      }, () => {
+        this.acceptCreating();
+      });
+    });
+  }
+
   cancelSelectedRoom() {
-    this.setState({ selectedRoom: null });
+    this.setState(() => ({ selectedRoom: null }), () => {
+      this.tryToGetRecommendation();
+    });
   }
 
   acceptCreating() {
     const { selectedRoom, theme, selectedUsers } = this.state;
-    if (selectedRoom) {
-      if (theme) {
-        const usersIds = selectedUsers.map(el => Number(el.id));
-        const roomId = Number(selectedRoom.room.id);
-        const variables = {
-          input: {
-            title: theme,
-            dateStart: new Date(selectedRoom.date.start),
-            dateEnd: new Date(selectedRoom.date.end),
-          },
-          usersIds,
-          roomId,
-        };
-        fetch({
-          query: `
+    if (selectedRoom.swap) {
+      fetch({
+        query: `{
+          event(id:${selectedRoom.swap.eventId}) {
+            title
+            users {
+              login
+            }
+            room {
+              title
+            }
+          }
+          room(id:${selectedRoom.swap.roomId}) {
+            title
+          }
+        }`,
+      }).then((res) => {
+        this.showSwapConfirmationModal(res.data);
+      });
+    } else if (selectedRoom && theme && !selectedRoom.swap) {
+      const usersIds = selectedUsers.map(el => Number(el.id));
+      const roomId = Number(selectedRoom.room.id);
+      const variables = {
+        input: {
+          title: theme,
+          dateStart: new Date(selectedRoom.date.start),
+          dateEnd: new Date(selectedRoom.date.end),
+        },
+        usersIds,
+        roomId,
+      };
+      fetch({
+        query: `
           mutation CreateEvent($input:EventInput!, $usersIds:[ID], $roomId:ID!) {
             createEvent(input:$input, usersIds:$usersIds, roomId:$roomId) {
               dateStart
@@ -293,15 +402,37 @@ class CreateMeetingContainer extends Component {
               }
             }
           }`,
-          variables,
-        }).then((res) => {
-          this.props.setModalCreatedContent(res.data);
-        });
+        variables,
+      }).then((res) => {
+        this.props.setModalCreatedContent(res.data);
         this.props.toggleModalCreated();
-        this.props.changeStageTo('workplace');
-      } else {
-        this.showError('Заполните поле "Тема"');
-      }
+        this.props.changeStageTo('workplace', '');
+      });
+    }
+  }
+
+  acceptEventEditing() {
+    const { selectedRoom, theme } = this.state;
+    if (selectedRoom && theme) {
+      const variables = {
+        input: {
+          title: theme,
+          dateStart: new Date(selectedRoom.date.start),
+          dateEnd: new Date(selectedRoom.date.end),
+        },
+        id: this.props.stage.payload.body.id,
+      };
+      fetch({
+        query: `
+        mutation UpdateEvent($input: EventInput!, $id:ID!) {
+          updateEvent(input:$input, id:$id) {
+            id
+          }
+        }`,
+        variables,
+      }).then(() => {
+        this.props.changeStageTo('workplace', '');
+      });
     }
   }
 
@@ -350,9 +481,9 @@ class CreateMeetingContainer extends Component {
   render() {
     return (
       <CreateMeeting
+        {...this.state}
         listRef={el => this.listElement = el}
         purpose={this.props.stage.payload.purpose}
-        {...this.state}
         declineCreating={this.declineCreating}
         acceptCreating={this.acceptCreating}
         selectingMembersTurningOn={this.selectingMembersTurningOn}
@@ -370,6 +501,9 @@ class CreateMeetingContainer extends Component {
         closeModalDeleteConfirmation={this.closeModalDeleteConfirmation}
         acceptDeleting={this.acceptDeleting}
         showDeleteConfirmation={this.showDeleteConfirmation}
+        closeSwapConfirmationModal={this.closeSwapConfirmationModal}
+        confirmEventsSwapAndCreate={this.confirmEventsSwapAndCreate}
+        acceptEventEditing={this.acceptEventEditing}
       />
     );
   }
