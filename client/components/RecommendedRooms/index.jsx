@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 import './RecommendedRooms.scss';
 
 const RecommendedRooms = (props) => {
-  const getDateString = (start, end) => `${new Date(start).getHours()}:${new Date(start).getMinutes()} – 
-  ${new Date(end).getHours()}:${new Date(end).getMinutes()}`;
+  const getDateString = (start, end) => {
+    const startHours = new Date(start).getHours();
+    const startMinutes = new Date(start).getMinutes();
+    const endHours = new Date(end).getHours();
+    const endMinutes = new Date(end).getMinutes();
+    return `${startHours}:${startMinutes < 10 ? '0' : ''}${startMinutes} – 
+    ${endHours}:${endMinutes < 10 ? '0' : ''}${endMinutes}`;
+  };
 
   const roomsJsx = props.recommendations.map(recommendation => (
     <div

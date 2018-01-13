@@ -13,32 +13,31 @@ const displayCurrent = () => !(currentDateTime.getHours() < 8 || currentDateTime
 
 
 /**
- * Function for translate click event cord to time
+ * Function for translate click event cord to chosed Date
  * @param {float} x
  * @returns {Date} event date
  */
 const cordToTime = (x) => {
-  const hours = 8 + ((33 - x) / 65.9167);
+  const hour = 0.0173913 * x + 3.23913;
   const date = new Date();
   date.setHours(0);
   date.setMinutes(0);
-  return new Date(date.getTime() + ((hours * 60) * 1000));
+  return new Date(date.getTime() + hour * 60 * 60 * 1000);
 };
 
 /**
  * @param {Number} val timeline hour
  * @returns {Number} x cord for layout greed
  */
-const calculateXCord = val => ((((val - 8) * 56.5) * 7) / 6) + 33;
+const calculateXCord = val => ((val - 8) * 57.5) + 28.75;
 
 /**
  * @param {Date} dateStart
  * @returns {Number} left x cord for event
  */
 const calculateXCordForEvent = dateStart =>
-  ((((((new Date(dateStart)).getHours() - 8) * 56.5) +
-  (new Date(dateStart)).getMinutes()) * 7) / 6) + 33;
-
+  ((new Date(dateStart).getHours() - 8) * 57.5) +
+  (new Date(dateStart).getMinutes() * 57.5 / 60) + 28.75;
 
 const InteractiveArea = ({ floors, ...props }) => {
   const [hour, min] = [currentDateTime.getHours(), currentDateTime.getMinutes()];
@@ -111,7 +110,7 @@ const InteractiveArea = ({ floors, ...props }) => {
                 let width = calculateXCordForEvent(event.dateEnd) -
                 calculateXCordForEvent(event.dateStart);
 
-                // End of the day
+                // 00-08 AM
                 if (width < 0) {
                   width = calculateXCord(24) - calculateXCordForEvent(event.dateStart);
                 }

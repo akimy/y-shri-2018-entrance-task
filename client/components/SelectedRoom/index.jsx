@@ -4,8 +4,12 @@ import './SelectedRoom.scss';
 import CloseIcon from './closeSelectedRoomIcon.svg';
 
 const SelectedRoom = (props) => {
-  const dateString = `${new Date(props.date.start).getHours()}:${new Date(props.date.start).getMinutes()}–
-  ${new Date(props.date.end).getHours()}:${new Date(props.date.end).getMinutes()}`;
+  const dateStartHours = new Date(props.date.start).getHours();
+  const dateStartMinutes = new Date(props.date.start).getMinutes();
+  const dateEndHours = new Date(props.date.end).getHours();
+  const dateEndMinutes = new Date(props.date.end).getMinutes();
+  const dateString = `${dateStartHours}:${dateStartMinutes < 10 ? '0' : ''}${dateStartMinutes}–
+  ${dateEndHours}:${dateEndMinutes < 10 ? '0' : ''}${dateEndMinutes}`;
   return (
     <div className="selected-room">
       <div className="selected-room__label">
