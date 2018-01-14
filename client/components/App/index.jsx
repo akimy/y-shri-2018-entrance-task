@@ -15,7 +15,7 @@ const App = props => (
     onClick={() => { props.closeSummaryDialog(); }}
   >
     <Header {...props} />
-    {props.stage.name === 'workplace' && props.modalCreated && props.modalCreatedContent &&
+    {props.stage.name === 'workplace' && props.modalCreated &&
     <ModalCreated
       toggleModalCreated={props.toggleModalCreated}
       modalCreatedContent={props.modalCreatedContent}
@@ -31,7 +31,11 @@ const App = props => (
       setModalCreatedContent={props.setModalCreatedContent}
     />}
     {props.summaryDialogOpened &&
-    <SummaryDialog {...props.summaryDialogContent} coords={props.summaryDialogCoords} handleEditMeeting={props.handleEditMeeting} />}
+    <SummaryDialog
+      {...props.summaryDialogContent}
+      coords={props.summaryDialogCoords}
+      handleEditMeeting={props.handleEditMeeting}
+    />}
   </main>
 );
 
@@ -53,10 +57,26 @@ App.propTypes = {
   setModalCreatedContent: PropTypes.func.isRequired,
   changeStageTo: PropTypes.func.isRequired,
   handleEditMeeting: PropTypes.func.isRequired,
+  modalCreatedContent: PropTypes.shape({
+    dateEnd: PropTypes.string,
+    dateStart: PropTypes.string,
+    room: PropTypes.shape({
+      floor: PropTypes.number,
+      title: PropTypes.string,
+    }),
+  }),
 };
 
 App.defaultProps = {
   summaryDialogCoords: {},
+  modalCreatedContent: {
+    dateStart: '',
+    dateEnd: '',
+    room: {
+      floor: 0,
+      title: '',
+    },
+  },
 };
 
 export default App;

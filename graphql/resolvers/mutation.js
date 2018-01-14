@@ -41,9 +41,14 @@ const mutations = {
       });
   },
 
-  updateEvent(root, { id, input }, context) {
+  updateEvent(root, { id, input, usersIds, roomId }, context) {
     return models.Event.findById(id)
-      .then(event => event.update(input));
+      .then(event => event.update(input))
+      .then((event) => {
+        event.setRoom(roomId);
+        return event.setUsers(usersIds)
+          .then(() => event);
+      });
   },
 
   removeUserFromEvent(root, { id, userId }, context) {

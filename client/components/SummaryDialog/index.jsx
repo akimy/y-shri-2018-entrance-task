@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './SummaryDialog.scss';
 import EditIcon from './edit.svg';
+import { monthsPlural } from '../../shared/months';
 
 const getPlural = (val) => {
   if (val === 1) {
@@ -24,12 +25,11 @@ const SummaryDialog = (props) => {
   }
   y += 27;
 
-  const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
   const start = new Date(props.dateStart);
   const end = new Date(props.dateEnd);
 
   const dateString = (
-    <div className="summary-dialog__date">{`${start.getDate()} ${months[start.getMonth()]} 
+    <div className="summary-dialog__date">{`${start.getDate()} ${monthsPlural[start.getMonth()]} 
     ${start.getHours()}:${start.getMinutes() < 10 ? '0' : ''}${start.getMinutes()}–
     ${end.getHours()}:${end.getMinutes() < 10 ? '0' : ''}${end.getMinutes()} · ${props.room.title}`}
     </div>);
@@ -69,7 +69,12 @@ const SummaryDialog = (props) => {
           <div
             role="button"
             tabIndex="0"
-            onKeyDown={e => console.log('lol')}
+            onKeyDown={(e) => {
+              e.stopPropagation();
+              if ((e.keyCode === 32) || (e.keyCode === 13)) {
+                props.handleEditMeeting();
+              }
+            }}
             className="summary-dialog__edit-icon-wrapper"
             title="Редактировать встречу"
             onClick={(e) => {

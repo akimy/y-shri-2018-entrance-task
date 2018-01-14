@@ -8,7 +8,9 @@ const RoomsList = ({ floors, hoveredRoomId }) => {
       <div className="floor__number">{`${el.floor} ЭТАЖ`}</div>
       {el.rooms.map(room => (
         <div key={room.id}>
-          <div className={hoveredRoomId === room.id ? 'floor__room-title_hovered' : 'floor__room-title'}>
+          <div className={hoveredRoomId === room.id ? 'floor__room-title_hovered' :
+          room.faded ? 'floor__room-title_faded' : 'floor__room-title'}
+          >
             {room.title}
           </div>
           <div className="floor__room-capacity">{`до ${room.capacity} человек`}</div>

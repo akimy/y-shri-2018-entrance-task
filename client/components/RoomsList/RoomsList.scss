@@ -34,6 +34,13 @@
     margin-bottom: 2px;
 }
 
+.floor__room-title_faded {
+    @extend %font-medium;
+    font-size: 15px;
+    color: $label-faded;
+    margin-bottom: 2px;
+}
+
 .floor__room-title_hovered {
     @extend %font-medium;
     font-size: 15px;

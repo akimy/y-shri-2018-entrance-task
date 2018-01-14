@@ -73,6 +73,7 @@ function createData() {
   const oneHourLater = new Date(now.getTime() + HOUR);
   const twoHoursLater = new Date(oneHourLater.getTime() + HOUR);
   const threeHoursLater = new Date(twoHoursLater.getTime() + HOUR);
+  const fiveHoursLater = new Date(now.getTime() + 5 * HOUR);
 
   const eventsPromise = models.Event.bulkCreate([
     {
@@ -93,7 +94,7 @@ function createData() {
     {
       title: 'Звездные разборки',
       dateStart: oneHourBefore,
-      dateEnd: twoHoursLater,
+      dateEnd: fiveHoursLater,
     },
   ]);
 

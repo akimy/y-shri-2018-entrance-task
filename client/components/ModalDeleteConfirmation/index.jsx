@@ -20,11 +20,10 @@ const ModalDeleteConfirmation = props => (
         <div className="modal__button-container">
           <div className="modal__button-container_inner">
             <Button
-              className="decline-button"
+              className="decline-button modal__button_margin-right"
               label="Отмена"
               onClick={{ func: () => props.closeModalDeleteConfirmation(), arg: '' }}
             />
-            <div style={{ width: '16px' }} />
             <Button
               className="decline-button"
               label="Удалить"

@@ -16,11 +16,17 @@
     margin: auto;
 }
 
+.create-meeting__error {
+    @extend %font-regular;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
 .meeting__label {
+    @extend %font-bold;
     font-size: 20px;
     margin-bottom: 20px;
     font-weight: 600;
-    font-family: 'HelveticaNeueBold', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 
 .meeting__clear-icon-wrapper {

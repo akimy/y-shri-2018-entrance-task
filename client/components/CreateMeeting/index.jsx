@@ -23,6 +23,7 @@ const getLabel = (purpose) => {
 
 const CreateMeeting = props => (
   <section
+    role="main"
     className="create-meeting"
     onClick={
     () => { props.selectingMembersTurningOff(); }
@@ -108,7 +109,7 @@ const CreateMeeting = props => (
               recommendations={props.recommendations}
               selectRoom={props.selectRoom}
             />}
-            { props.selectedRoom &&
+            { props.selectedRoom && props.showSelectedRoom &&
             <SelectedRoom
               title={props.selectedRoom.room.title}
               floor={props.selectedRoom.room.floor}
@@ -116,7 +117,7 @@ const CreateMeeting = props => (
               date={props.selectedRoom.date}
             /> }
             {props.error &&
-            <div>{props.error}</div>}
+            <div className="create-meeting__error">{props.error}</div>}
           </div>
         </div>
       </div>
@@ -177,11 +178,22 @@ CreateMeeting.propTypes = {
   swapConfirmationOpened: PropTypes.bool.isRequired,
   acceptEventEditing: PropTypes.func.isRequired,
   error: PropTypes.string.isRequired,
+  showSelectedRoom: PropTypes.bool,
+  swapData: PropTypes.shape({
+    event: PropTypes.objectOf(PropTypes.any),
+    room: PropTypes.objectOf(PropTypes.any),
+  }),
+  purpose: PropTypes.string.isRequired,
 };
 
 CreateMeeting.defaultProps = {
   selectedUsers: [],
   selectedRoom: null,
+  showSelectedRoom: true,
+  swapData: {
+    event: {},
+    room: {},
+  },
 };
 
 export default CreateMeeting;

@@ -22,11 +22,10 @@ const ModalSwapConfirmation = (props) => {
           <div className="modal__button-container_swap">
             <div className="modal__button-container_inner">
               <Button
-                className="decline-button"
+                className="decline-button modal__button_margin-right"
                 label="Отмена"
                 onClick={{ func: () => props.closeSwapConfirmationModal(), arg: '' }}
               />
-              <div style={{ width: '16px' }} />
               <Button
                 className="accept-button"
                 label="Подтвердить"

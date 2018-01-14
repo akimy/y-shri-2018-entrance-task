@@ -15,7 +15,6 @@ class AppContainer extends Component {
           body: '',
         },
       },
-      modalCreatedContent: '',
     };
 
     this.handleEditMeeting = this.handleEditMeeting.bind(this);
@@ -27,7 +26,9 @@ class AppContainer extends Component {
   }
 
   setModalCreatedContent(content) {
-    this.setState({ modalCreatedContent: content.createEvent });
+    this.setState(() => ({ modalCreatedContent: content.createEvent }), () => {
+      this.toggleModalCreated();
+    });
   }
 
   handleEditMeeting() {

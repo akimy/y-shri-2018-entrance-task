@@ -6,8 +6,7 @@ import './CreateMeetingFooter.scss';
 const CreateMeetingFooter = props => (
   <footer className="create-meeting__footer">
     <div className="footer__buttons-container">
-      <Button className="decline-button" label="Отмена" onClick={{ func: props.decline, arg: '' }} />
-      <div style={{ width: '16px' }} />
+      <Button className="decline-button footer__button_margin-right" label="Отмена" onClick={{ func: props.decline, arg: '' }} />
       <Button
         className={props.ready ? 'accept-button' : 'accept-button_disabled'}
         label="Создать встречу"

@@ -66,10 +66,20 @@ class CreateMeetingContainer extends Component {
 
     const { body, purpose } = this.props.stage.payload;
     if (purpose === 'createFromTimeline') {
-      this.setState({
+      this.setState(() => ({
+        showSelectedRoom: false,
         date: new Date(body.date),
         timeStart: new Date(body.date),
         timeEnd: new Date((new Date(body.date)).getTime() + (60 * (60 * 1000))),
+        selectedRoom: {
+          date: {
+            start: new Date(body.date).getTime(),
+            end: new Date((new Date(body.date)).getTime() + (60 * (60 * 1000))).getTime(),
+          },
+          room: body.room,
+        },
+      }), () => {
+        this.tryToGetRecommendation();
       });
     } else if (purpose === 'createNew') {
       this.setState({
@@ -103,8 +113,14 @@ class CreateMeetingContainer extends Component {
  * @returns {Recommendation[]} Rooms
  */
   getRecommendation(date, members, db) {
+    this.showError('');
     const recommendations = [];
-    const roomsWithSufficientCapacity = db.rooms.filter(room => room.capacity >= members.length);
+    let membersCount = 0;
+    let withoutSwaps = true;
+    if (members) {
+      membersCount = members.length;
+    }
+    const roomsWithSufficientCapacity = db.rooms.filter(room => room.capacity >= membersCount);
 
     if (roomsWithSufficientCapacity.length === 0) {
       this.showError('У нас не существует комнат с достаточным количеством мест для вашей компании');
@@ -126,7 +142,7 @@ class CreateMeetingContainer extends Component {
 
       if (freeRooms.length === 0) { // If all rooms for time interval currently is busy
         const hashMap = {};
-        let roomsAvailableViaSwap = roomsWithSufficientCapacity.filter((room, i, rooms) =>
+        const roomsAvailableViaSwap = roomsWithSufficientCapacity.filter((room, i, rooms) =>
           room.events.filter(event => !((date.start > new Date(event.dateEnd).getTime()) ||
          (date.end < new Date(event.dateStart).getTime())))
             .reduce((acc, event) => {
@@ -135,7 +151,7 @@ class CreateMeetingContainer extends Component {
               const usersCount = event.users.length;
 
               const targetsForSwap = rooms.filter(_room =>
-                _room.capacity > usersCount).filter(_room =>
+                _room.capacity >= usersCount).filter(_room =>
                 _room.events.reduce((_acc, _event) => {
                   const _roomEventStart = new Date(_event.dateStart).getTime();
                   const _roomEventEnd = new Date(_event.dateEnd).getTime();
@@ -154,14 +170,13 @@ class CreateMeetingContainer extends Component {
                 return acc;
               }
               return false;
-            }, true));
-
-        roomsAvailableViaSwap = roomsAvailableViaSwap.map((el) => {
-          Object.assign(el, { swap: { ...hashMap[el.id] } });
-          return el;
+            }, true)).map((room) => {
+          Object.assign(room, { swap: { ...hashMap[room.id] } });
+          return room;
         });
 
         if (roomsAvailableViaSwap.length !== 0) {
+          withoutSwaps = false;
           roomsAvailableViaSwap.forEach((room) => {
             recommendations.push({
               date: { start: date.start, end: date.end },
@@ -169,18 +184,37 @@ class CreateMeetingContainer extends Component {
               swap: room.swap,
             });
           });
+        } else {
+          this.showError('Нет доступных комнат на это время, изучите таймлайн на главной странице');
         }
       } else {
-        const sortedRooms = freeRooms.sort((first, second) =>
-          (this.countFloorSteps(first, members) > this.countFloorSteps(second, members) ? 1 : -1));
+        let sortedRooms = [];
+        if (members) {
+          sortedRooms = freeRooms.sort((first, second) =>
+            (this.countFloorSteps(first, members) >
+            this.countFloorSteps(second, members) ? 1 : -1));
+        } else {
+          sortedRooms = freeRooms;
+        }
+
         sortedRooms.forEach((room) => {
           recommendations.push({ date: { start: date.start, end: date.end }, room, swap: null });
         });
       }
     }
 
-    this.setState(() => ({ recommendations }), () => {
-      this.setState({ selectedRoom: null });
+    let newSelected = false;
+    if (withoutSwaps && this.state.selectedRoom) {
+      [newSelected] = recommendations.filter(recommendation =>
+        recommendation.room.id === this.state.selectedRoom.room.id);
+    }
+
+    this.setState(() => ({ recommendations, showSelectedRoom: true }), () => {
+      if (newSelected) {
+        this.setState({ selectedRoom: newSelected });
+      } else {
+        this.setState({ selectedRoom: null });
+      }
     });
   }
 
@@ -246,8 +280,7 @@ class CreateMeetingContainer extends Component {
     } = this.state;
 
     // There's at least one selected user & 15 min interval before start and end of the meeting
-    if ((selectedUsers.length !== 0) &&
-    (((timeEnd.getTime() - timeStart.getTime()) > 9e5))) {
+    if ((timeEnd.getTime() - timeStart.getTime()) >= 9e5) {
       fetch({
         query: `{
           rooms {
@@ -294,6 +327,7 @@ class CreateMeetingContainer extends Component {
         this.getRecommendation(eventDate, selectedUsers, db.data);
       });
     } else {
+      this.showError('Минимальный интервал между временем начала встречи и завершением должен составлять не менее 15 минут');
       this.setState(() => ({ selectedRoom: null }), () => {
         this.setState({ recommendations: [] });
       });
@@ -405,7 +439,6 @@ class CreateMeetingContainer extends Component {
         variables,
       }).then((res) => {
         this.props.setModalCreatedContent(res.data);
-        this.props.toggleModalCreated();
         this.props.changeStageTo('workplace', '');
       });
     }
@@ -421,12 +454,23 @@ class CreateMeetingContainer extends Component {
           dateEnd: new Date(selectedRoom.date.end),
         },
         id: this.props.stage.payload.body.id,
+        usersIds: this.state.selectedUsers.map(u => u.id),
+        roomId: this.state.selectedRoom.room.id,
       };
       fetch({
         query: `
-        mutation UpdateEvent($input: EventInput!, $id:ID!) {
-          updateEvent(input:$input, id:$id) {
+        mutation updateEvent($id:ID!,$input:EventInput!,$usersIds:[ID],$roomId:ID!) {
+          updateEvent(id:$id,input:$input,usersIds:$usersIds,roomId:$roomId){
             id
+            title
+            dateStart
+            dateEnd
+            users {
+              id
+            }
+            room {
+              id
+            }
           }
         }`,
         variables,
