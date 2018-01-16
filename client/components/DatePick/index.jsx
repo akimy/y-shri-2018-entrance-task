@@ -9,6 +9,7 @@ import 'intl/locale-data/jsonp/ru';
 import 'intl/locale-data/jsonp/ru-RU';
 import './DatePick.scss';
 import CalendarIcon from './calendar.svg';
+import { monthsPlural } from '../../shared/months';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -18,6 +19,9 @@ const muiTheme = getMuiTheme({
     pickerHeaderColor: '#007dff',
   },
 });
+
+const dateString = date => `${date.getDate()} ${monthsPlural[date.getMonth()]} ${date.getFullYear()} г.`;
+const timeString = time => `${time.getHours()}:${time.getMinutes() < 10 ? '0' : ''}${time.getMinutes()}`;
 
 class DatePick extends Component {
   render() {
@@ -34,7 +38,7 @@ class DatePick extends Component {
             tabIndex="0"
             onClick={() => { this.datePickerRef.openDialog(); }}
           >
-            <span className="date-picker__input-fields-content">12 декабря 2018 г.</span>
+            <span className="date-picker__input-fields-content">{dateString(this.props.dateStart)}</span>
             <div className="calendar__hidden-instance">
               <MuiThemeProvider muiTheme={muiTheme}>
                 <DatePicker
@@ -70,7 +74,7 @@ class DatePick extends Component {
               tabIndex="0"
               onClick={() => { this.timeStart.openDialog(); }}
             >
-              <span className="date-picker__input-fields-content">19:31</span>
+              <span className="date-picker__input-fields-content">{timeString(this.props.timeStart)}</span>
               <div className="calendar__hidden-instance">
                 <MuiThemeProvider muiTheme={muiTheme}>
                   <TimePicker
@@ -97,9 +101,9 @@ class DatePick extends Component {
               className="date-picker__time-input-field"
               role="listbox"
               tabIndex="0"
-              onClick={() => { this.timeStart.openDialog(); }}
+              onClick={() => { this.timeEnd.openDialog(); }}
             >
-              <span className="date-picker__input-fields-content">20:51</span>
+              <span className="date-picker__input-fields-content">{timeString(this.props.timeEnd)}</span>
               <div className="calendar__hidden-instance">
                 <MuiThemeProvider muiTheme={muiTheme}>
                   <TimePicker
