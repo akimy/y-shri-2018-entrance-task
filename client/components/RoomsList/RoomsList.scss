@@ -27,6 +27,13 @@
     color: black;
 }
 
+.floor__room-capacity_faded {
+    @extend %font-regular;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: $label-faded;
+}
+
 .floor__room-title {
     @extend %font-medium;
     font-size: 15px;

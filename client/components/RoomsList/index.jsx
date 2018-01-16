@@ -13,7 +13,7 @@ const RoomsList = ({ floors, hoveredRoomId }) => {
           >
             {room.title}
           </div>
-          <div className="floor__room-capacity">{`до ${room.capacity} человек`}</div>
+          <div className={room.faded ? 'floor__room-capacity_faded' : 'floor__room-capacity'}>{`до ${room.capacity} человек`}</div>
         </div>))}
     </div>
   ));
