@@ -12,3 +12,9 @@
     display: flex;
     margin: auto;
 }
+
+@media all and (max-width: 750px) {
+    .edit-meeting__footer   {
+        border-top: 8px solid #e9ecef;
+    }
+}

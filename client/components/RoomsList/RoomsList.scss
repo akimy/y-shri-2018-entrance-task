@@ -58,12 +58,21 @@
 @media all and (max-width: 750px) {
     .rooms-list {
         position: absolute;
-        top: 146px;
+        top: 150px;
     }
-    .floor__room-title_faded, .floor__room-title, .floor__room-capacity_faded,.floor__room-capacity {
+    .floor__room-title, .floor__room-title_faded {
+        background: #FFFFFF;
+        box-shadow: 0 1px 8px 0 rgba(0,44,92,0.28);
+        border-radius: 4px;
+        font-size: 13px;
+        padding: 5px;
+        margin-bottom: -9px;
+    }
+    .floor__room-capacity_faded,.floor__room-capacity {
         visibility: hidden;
     }
     .rooms-list {
         box-shadow: initial;
+        pointer-events: none;
     }
 }

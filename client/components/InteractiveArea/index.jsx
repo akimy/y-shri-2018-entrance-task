@@ -131,7 +131,6 @@ const InteractiveArea = ({ floors, ...props }) => {
                   x="0"
                   y="0"
                   width="100%"
-                  height="28"
                   className="timeline__empty-track"
                   onMouseMove={(e) => {
                     if (getPermissionForCreateEvent(currentDate, pointStatus, e.clientX)) {
@@ -166,7 +165,6 @@ const InteractiveArea = ({ floors, ...props }) => {
                   x={startEventCord}
                   y="0"
                   width={width}
-                  height="28"
                   className="timeline__event-track"
                   tabIndex="0"
                   onKeyDown={(e) => {

@@ -42,44 +42,48 @@ const CreateMeeting = props => (
 
     <main className="create-meeting__content-wrapper">
       <div className="create-meeting__content">
-        <div className="row">
-          <h3 className="meeting__label">{getLabel(props.purpose)}</h3>
-          <span
-            role="button"
-            tabIndex="0"
-            className="meeting__clear-icon-wrapper"
-            title="Отмена"
-            onKeyDown={(e) => {
+        <div className="meeting__date-time-settings">
+          <div className="row">
+            <h3 className="meeting__label">{getLabel(props.purpose)}</h3>
+            <span
+              role="button"
+              tabIndex="0"
+              className="meeting__clear-icon-wrapper"
+              title="Отмена"
+              onKeyDown={(e) => {
               if ((e.keyCode === 32) || (e.keyCode === 13)) {
                 props.declineCreating();
               }
             }}
-            onClick={() => {
+              onClick={() => {
               props.declineCreating();
             }}
-          >
-            <img className="meeting__clear-icon" src={CloseIcon} alt="Отмена" />
-          </span>
-        </div>
-        <div className="row_align-end" style={{ marginBottom: '24px' }}>
-          <InputField
-            id="theme"
-            placeholder="О чем будете говорить?"
-            label="Тема"
-            value={props.theme}
-            onChange={props.handleChangeTheme}
-          />
-          <DatePick
-            dateStart={props.date}
-            timeStart={props.timeStart}
-            timeEnd={props.timeEnd}
-            setDate={props.setDate}
-            setTimeStart={props.setTimeStart}
-            setTimeEnd={props.setTimeEnd}
-          />
+            >
+              <img className="meeting__clear-icon" src={CloseIcon} alt="Отмена" />
+            </span>
+          </div>
+          <div className="row_align-end">
+            <div className="meeting__theme-container">
+              <InputField
+                id="theme"
+                placeholder="О чем будете говорить?"
+                label="Тема"
+                value={props.theme}
+                onChange={props.handleChangeTheme}
+              />
+            </div>
+            <DatePick
+              dateStart={props.date}
+              timeStart={props.timeStart}
+              timeEnd={props.timeEnd}
+              setDate={props.setDate}
+              setTimeStart={props.setTimeStart}
+              setTimeEnd={props.setTimeEnd}
+            />
+          </div>
         </div>
         <div className="row_align-top">
-          <div className="column">
+          <div className="column column_mobile-separators">
             <InputField
               id="users"
               placeholder="Например, Тор Одинович"
@@ -102,6 +106,7 @@ const CreateMeeting = props => (
               removeUserFromSelected={props.removeUserFromSelected}
             />
           </div>
+
           <div className="column">
             { props.recommendations.length !== 0 && !props.selectedRoom &&
             <RecommendedRooms
@@ -121,6 +126,15 @@ const CreateMeeting = props => (
         </div>
       </div>
     </main>
+    { props.recommendations.length !== 0 && !props.selectedRoom &&
+    <div className="meeting__mobile-instruction">Выберите переговорку</div>}
+    {props.purpose === 'edit' &&
+    <div
+      className="meeting__mobile-delete-container"
+      onClick={() => { props.showDeleteConfirmation(); }}
+    >
+      <span className="meeting__mobile-delete-text">Удалить встречу</span>
+    </div>}
     {props.purpose !== 'edit' &&
     <CreateMeetingFooter
       ready={!!props.selectedRoom && (props.selectedUsers.length !== 0) && (props.theme !== '')}

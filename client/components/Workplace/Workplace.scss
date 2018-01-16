@@ -58,10 +58,8 @@
         height: 56px;
     }
     .workplace__left-column {
-        flex-grow: 0;        
-    }
-    .workplace__right-column {
-        box-shadow: 0 -1px 0 0 #e9ecef;
+        flex-grow: 0;
+        z-index: 1;       
     }
     .workplace__scroll-container {
         display: flex;

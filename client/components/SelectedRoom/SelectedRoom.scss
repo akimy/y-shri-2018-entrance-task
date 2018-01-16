@@ -19,8 +19,7 @@
     flex-direction: row;
     align-items: center;
     border-radius: 4px;
-    background-color: $accept-normal;
-    margin-bottom: 8px;
+    background-color: $accept-normal;;
     cursor: default;
     transition: 300ms cubic-bezier(0.03, 0.63, 0.24, 1.01);
 }
@@ -49,7 +48,12 @@
 }
 
 @media all and (max-width: 750px) {
+    .selected-room {
+        padding: 16px;
+    }
+
     .selected-room__tile {
         width: initial;
+        height: 44px;
     }
 }

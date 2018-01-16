@@ -36,6 +36,11 @@
         width: 100%;
     }
     .input-field__control {
-        width: calc(100% - 11px);
+        width: 100%;
+        box-sizing: border-box;
+        height: 44px;
+    }
+    .input-field__label {
+        padding-bottom: 4px;
     }
 }

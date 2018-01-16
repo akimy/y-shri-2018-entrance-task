@@ -1,11 +1,21 @@
 @import '../../shared/styles';
 
-.calendar__separator {
+.date-picker {
+    display: flex;
+}
+
+.datepicker__separator {
     width: 14px;
     padding-top: 21px;
     display: inline-flex;
     border-bottom: 2px solid black;
     margin: auto;
+}
+
+.datepicker__separator-container {
+    display: flex;
+    width: 22px;
+    margin: 0 2px;
 }
 
 %base-input {
@@ -25,13 +35,13 @@
     }
 }
 
-.calendar-input__wrapper {
-    position: relative;
-    left: -56px;
+.datepicker-icon__wrapper {
+    display: flex;
+    align-content: center;
     width: 13px;
-    padding: 13px;
     margin-left: auto;
     z-index: -1;
+    margin-right: 10px;
 }
 
 .calendar-input__icon {
@@ -41,4 +51,77 @@
 .time-input {
     @extend %base-input;
     width: 72px;
+}
+
+.date-picker__date-input-field {
+    @extend %font-regular;
+    margin-right: 16px;
+    display: flex;
+    max-width: 238px;
+    align-items: center;
+    color: black;
+    font-size: 13px;
+    font-weight: 400;
+    box-shadow: inset 0 0 0 2px #e9ecef;
+    border-radius: 4px;
+    width: 409px;
+    height: 38px;
+    &:hover {
+        box-shadow: inset 0 0 0 2px rgba(0, 125, 255, 0.25)
+    }
+    &:focus {
+        box-shadow: inset 0 0 0 2px $accept-normal;
+    }
+}
+
+.date-picker__time-inputs-container {
+    display: flex;
+}
+
+.date-picker__time-input-field {
+    @extend %font-regular;
+    display: flex;
+    min-width: 72px;
+    align-items: center;
+    color: black;
+    font-size: 13px;
+    font-weight: 400;
+    box-shadow: inset 0 0 0 2px #e9ecef;
+    border-radius: 4px;
+    height: 38px;
+    &:hover {
+        box-shadow: inset 0 0 0 2px rgba(0, 125, 255, 0.25)
+    }
+    &:focus {
+        box-shadow: inset 0 0 0 2px $accept-normal;
+    }
+}
+
+.date-picker__input-fields-content {
+    padding-left: 11px;
+}
+
+@media all and (max-width: 750px) {
+    .date-picker__date-input-field {
+        height: 44px;
+        color: black;
+        max-width: initial;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+
+    .input-field {
+        width: 100%;
+        display: flex;
+    }
+
+    .date-picker {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .date-picker__time-inputs-container {
+        margin-bottom: 20px;
+    }
 }

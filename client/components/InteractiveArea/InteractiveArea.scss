@@ -77,6 +77,7 @@
 }
 
 .timeline__event-track {
+    height: 28px;
     fill: $event-track;
     cursor: pointer;
     &:hover {
@@ -92,6 +93,7 @@
 
 .timeline__empty-track {
     fill: white;
+    height: 28px;
 }
 
 .timeline__pointer {
@@ -110,5 +112,8 @@
 @media all and (max-width: 750px) {
     .interactive-area {
         height: initial;
+    }
+    .timeline__event-track, .timeline__empty-track {
+        height: 45px;
     }
 }

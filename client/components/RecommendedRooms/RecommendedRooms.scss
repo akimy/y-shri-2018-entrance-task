@@ -56,3 +56,14 @@
         width: initial;
     }
 }
+
+@media all and (max-width: 750px) {
+    .recommended-rooms {
+        padding: 16px;
+    }
+    
+    .recommended-rooms__tile {
+        width: initial;
+        height: 44px;
+    }
+}

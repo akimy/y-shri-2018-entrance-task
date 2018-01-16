@@ -11,7 +11,7 @@
 }
 
 .create-meeting__content {
-    padding: 32px 0;
+    padding: 32px 10px;
     width: 880px;
     margin: auto;
 }
@@ -61,6 +61,50 @@
     flex-direction: column;
 }
 
+
+.row_align-top {
+    display: flex;
+    align-items: top;
+    width: 100%;
+}
+
+.row_align-end {
+    display: flex;
+    width: 100%;
+    align-items: flex-end;
+    margin-bottom: 24px;
+}
+
+.meeting__mobile-instruction {
+    display: none;
+    @extend %font-bold;
+    font-size: 15px;
+    padding-left: 16px;
+    color: white;
+    min-height: 43px;
+    background-color: rgba(0,16,33,0.80);
+    align-items: center;
+    bottom: 0px;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+}
+
+.meeting__mobile-delete-container {
+    display: none;
+    height: 54px;
+    border-top: 8px solid #e9ecef;
+}
+
+.meeting__mobile-delete-text {
+    @extend %font-medium;
+    color: #FF3333;
+    font-size: 15px;
+    margin: auto;
+    
+
+}
+
 @media all and (max-width: 750px) {
     .create-meeting {
         margin-top: 48px; 
@@ -69,7 +113,8 @@
     .create-meeting__content {
         display: flex;
         flex-direction: column;
-        padding: 20px 10px;
+        padding: 0;
+        margin-top: 24px;
         width: initial;
         position: relative;
     }
@@ -82,5 +127,43 @@
 
     .column {
         width: 100%;
+    }
+
+    .meeting__label, .meeting__theme-container {
+        margin-bottom: 16px;
+        width: 100%;
+    }
+
+    .meeting__clear-icon-wrapper {
+        display: none;
+    }
+
+    .meeting__date-time-settings {
+        padding: 0 16px;
+    }
+    
+    .column_mobile-separators {
+        border-top: 8px solid #e9ecef;
+        border-bottom: 8px solid #e9ecef;
+        padding: 16px 16px 8px 16px;
+        box-sizing: border-box;
+    }
+
+    .row_align-end {
+        margin-bottom: 0;
+    }
+
+    .meeting__mobile-instruction {
+        display: flex;
+    }
+
+    .meeting__mobile-delete-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .create-meeting__error {
+        margin: 16px;
     }
 }

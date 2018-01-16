@@ -1,7 +1,9 @@
 @import '../../shared/styles';
 
 .create-meeting__footer {
+    z-index: 3;
     display: flex;
+    background-color: white;
     flex: 0 0 auto;
     height: 76px;
     box-shadow: 0 -1px 0 0 $faded;
@@ -15,4 +17,10 @@
 
 .footer__button_margin-right {
     margin-right: 16px;
+}
+
+@media all and (max-width: 750px) {
+    .create-meeting__footer  {
+        border-top: 8px solid #e9ecef;
+    }
 }

@@ -13,3 +13,13 @@
 .modal__button_margin-right {
     margin-right: 16px
 }
+
+@media all and (max-width: 750px) {
+    .modal__container{
+        width: 100%;
+    }
+    .modal__wrapper {
+        vertical-align: bottom;
+        padding-bottom: 24px;
+    }
+}
