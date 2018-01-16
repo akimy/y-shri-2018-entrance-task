@@ -141,8 +141,8 @@ const InteractiveArea = ({ floors, ...props }) => {
                     }
                 }}
                   onClick={(e) => {
-                    if (window.innerWidth < 900) {
-                      props.handleTimelineClick(new Date(), room);
+                    if (window.innerWidth < 900 && (props.calendarDate.getTime() > new Date().getTime())) {
+                      props.handleTimelineClick(props.calendarDate, room);
                     } else if (getPermissionForCreateEvent(currentDate, pointStatus, e.clientX)) {
                     props.handleTimelineClick(cordToTime(e.clientX, props.calendarDate), room);
                   }
