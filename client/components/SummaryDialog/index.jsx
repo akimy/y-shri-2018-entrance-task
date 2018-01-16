@@ -26,8 +26,7 @@ const SummaryDialog = (props) => {
   y += 27;
 
   if (window.innerWidth < 900) {
-    x = window.innerWidth - 310;
-    offset = props.coords.x - x - 130;
+    offset = -1 * (window.innerWidth / 2 - (props.coords.x + props.coords.width / 2));
   }
 
   const start = new Date(props.dateStart);

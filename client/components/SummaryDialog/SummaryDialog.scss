@@ -126,7 +126,8 @@
 
 @media all and (max-width: 750px) {
     .summary-dialog {
-        width: 300px;
+        width: 100%;
         z-index: 3;
+        left: 0 !important;
     }
 }

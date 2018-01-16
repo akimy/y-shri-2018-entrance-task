@@ -2,6 +2,8 @@
 
 .edit-meeting__footer {
     display: flex;
+    z-index: 3;
+    background-color: white;
     flex: 0 0 auto;
     height: 76px;
     box-shadow: 0 -1px 0 0 $faded;
