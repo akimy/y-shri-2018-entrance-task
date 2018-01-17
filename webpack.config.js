@@ -5,17 +5,20 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const env = process.env.NODE_ENV;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const inProduction = env === 'production';
+const inDevelopment = env === 'development';
+
 const config = {
   entry: './client/index.js',
   output: { path: `${__dirname}/public`, filename: 'bundle.js' },
   resolve: {extensions: ['.js','.jsx']},
-  watch: env === 'development',
+  watch: inDevelopment,
   module: {
     loaders: [
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
-            use: ['css-loader', 'sass-loader'],
+            use: [{loader:'css-loader', options: { minimize: inProduction }}, 'sass-loader'],
             publicPath: '/public',
           })
       },
@@ -51,7 +54,7 @@ const config = {
     ],
 };
 
-if (env === 'production') {
+if (inProduction) {
   config.plugins.push(new UglifyJsPlugin({
     sourceMap: true,
   }));
