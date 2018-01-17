@@ -47,3 +47,9 @@
     height: 37px;
     cursor: pointer;
 }
+
+@media all and (max-width: 750px) {
+    .selected-room__tile {
+        width: initial;
+    }
+}

@@ -30,3 +30,12 @@
     display: inline-flex;
     flex-direction: column;
 }
+
+@media all and (max-width: 750px) {
+    .input-field {
+        width: 100%;
+    }
+    .input-field__control {
+        width: calc(100% - 11px);
+    }
+}

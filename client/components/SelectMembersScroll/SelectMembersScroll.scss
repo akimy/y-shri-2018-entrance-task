@@ -78,3 +78,9 @@
     font-size: 13px;
     color: #858e98;
 }
+
+@media all and (max-width: 750px) {
+    .select-scroll {
+        width: initial;
+    }
+}
