@@ -22,9 +22,7 @@ body, #app, html, .react-app {
   width: 100%;
 }
 
-.mobile-hidden {
-  display: none;
-}
+
 
 @media all and (max-width: 750px) {
   .row_align-end {
@@ -34,5 +32,8 @@ body, #app, html, .react-app {
   }
   .row_align-top {
     flex-direction: column;
+  }
+  .mobile-hidden {
+    display: none;
   }
 }
