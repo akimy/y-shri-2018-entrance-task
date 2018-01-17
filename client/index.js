@@ -6,7 +6,3 @@ render(
   <AppContainer />,
   document.getElementById('app'),
 );
-
-window.onresize = (e) => {
-  console.log(window.screen);
-}
