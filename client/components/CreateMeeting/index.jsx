@@ -23,7 +23,6 @@ const getLabel = (purpose) => {
 
 const CreateMeeting = props => (
   <section
-    role="main"
     className="create-meeting"
     onClick={
     () => { props.selectingMembersTurningOff(); }
@@ -41,7 +40,7 @@ const CreateMeeting = props => (
       swapData={props.swapData}
     />}
 
-    <div className="create-meeting__content-wrapper">
+    <main className="create-meeting__content-wrapper">
       <div className="create-meeting__content">
         <div className="row">
           <h3 className="meeting__label">{getLabel(props.purpose)}</h3>
@@ -121,7 +120,7 @@ const CreateMeeting = props => (
           </div>
         </div>
       </div>
-    </div>
+    </main>
     {props.purpose !== 'edit' &&
     <CreateMeetingFooter
       ready={!!props.selectedRoom && (props.selectedUsers.length !== 0) && (props.theme !== '')}

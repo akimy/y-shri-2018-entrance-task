@@ -123,3 +123,9 @@
     display: flex;
     margin: auto;
 }
+
+@media all and (max-width: 750px) {
+    .summary-dialog {
+        width: 300px;
+    }
+}

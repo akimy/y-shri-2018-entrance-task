@@ -14,6 +14,10 @@
     max-width: 245px;
 }
 
+.workplace__scroll-container {
+    display: flex;
+    flex: 1;
+}
 .workplace__right-column {
     display: flex;
     flex: 1 0 auto;
@@ -35,5 +39,35 @@
     }
     &::-webkit-scrollbar-thumb {
         background: #000; 
+    }
+}
+
+
+@media all and (max-width: 750px) {
+    .workplace {
+        margin-top: 49px;
+        flex-direction: column;
+    }
+
+    .workplace__left-column {
+        min-width: initial;
+        max-width: initial;
+    }
+    
+    .calendar {
+        height: 56px;
+    }
+    .workplace__left-column {
+        flex-grow: 0;        
+    }
+    .workplace__right-column {
+        box-shadow: 0 -1px 0 0 #e9ecef;
+    }
+    .workplace__scroll-container {
+        display: flex;
+        overflow-x: scroll;
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 }

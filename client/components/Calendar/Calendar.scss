@@ -52,3 +52,21 @@
     display: flex;
     min-width: 130px;
 }
+
+//media
+@media all and (max-width: 750px) {
+    .calendar__icon-wrapper {
+        width: 34px;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    .calendar__content {
+        width: 100%;
+    }
+
+    .calendar__current-date-container {
+        width: 100%;
+    }
+
+}

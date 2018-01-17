@@ -6,7 +6,7 @@ import Calendar from '../Calendar';
 import './Workplace.scss';
 
 const Workplace = props => (
-  <section className="workplace">
+  <main className="workplace">
     <div className="workplace__left-column">
       <Calendar
         setCalendarDate={props.setCalendarDate}
@@ -17,19 +17,21 @@ const Workplace = props => (
       <RoomsList floors={props.floors} hoveredRoomId={props.hoveredRoomId} />
     </div>
     <div className="workplace__right-column">
-      <InteractiveArea
-        floors={props.floors}
-        toggleSummaryDialog={props.toggleSummaryDialog}
-        handleTimelineMouseIn={props.handleTimelineMouseIn}
-        handleTimelineMouseOut={props.handleTimelineMouseOut}
-        handleTimelineMouseMove={props.handleTimelineMouseMove}
-        handleTimelineClick={props.handleTimelineClick}
-        hoveredRoomId={props.hoveredRoomId}
-        pointerXCord={props.pointerXCord}
-        calendarDate={props.calendarDate}
-      />
+      <div className="workplace__scroll-container">
+        <InteractiveArea
+          floors={props.floors}
+          toggleSummaryDialog={props.toggleSummaryDialog}
+          handleTimelineMouseIn={props.handleTimelineMouseIn}
+          handleTimelineMouseOut={props.handleTimelineMouseOut}
+          handleTimelineMouseMove={props.handleTimelineMouseMove}
+          handleTimelineClick={props.handleTimelineClick}
+          hoveredRoomId={props.hoveredRoomId}
+          pointerXCord={props.pointerXCord}
+          calendarDate={props.calendarDate}
+        />
+      </div>
     </div>
-  </section>
+  </main>
 );
 
 Workplace.propTypes = {

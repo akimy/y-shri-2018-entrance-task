@@ -21,3 +21,21 @@
     margin-left: auto;
     margin-right: 36px;
 }
+
+@media all and (max-width: 750px) {
+    .header__button-container {
+        display: none;
+    }
+
+    .header__logo {
+        margin-left: 20.5px;
+        height: 21px;
+    }
+
+    .header {
+        position: fixed;
+        min-height: 48px;
+        box-shadow: 0 1px 0 0 #e9ecef;
+        width: 100%;
+    }
+}

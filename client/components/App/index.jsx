@@ -10,7 +10,8 @@ import CreateMeetingContainer from '../../containers/CreateMeetingContainer';
 
 
 const App = props => (
-  <main
+  <div
+    className="react-app"
     onScroll={() => { props.closeSummaryDialog(); }}
     onClick={() => { props.closeSummaryDialog(); }}
   >
@@ -36,7 +37,7 @@ const App = props => (
       coords={props.summaryDialogCoords}
       handleEditMeeting={props.handleEditMeeting}
     />}
-  </main>
+  </div>
 );
 
 App.propTypes = {

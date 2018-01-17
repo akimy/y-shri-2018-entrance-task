@@ -10,7 +10,7 @@
 
 .graph-container {
     display: flex;
-    width: 1750px;
+    width: 100%;
     position: absolute;
     height: 100%;
 }
@@ -105,4 +105,10 @@
 .timeline__pointer-icon {
 
     pointer-events : none;
+}
+
+@media all and (max-width: 750px) {
+    .interactive-area {
+        height: initial;
+    }
 }
