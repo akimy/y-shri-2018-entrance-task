@@ -82,7 +82,7 @@ class CreateMeetingContainer extends Component {
         this.tryToGetRecommendation();
       });
     } else if (purpose === 'createNew') {
-      this.setState((state, props) => ({
+      this.setState(() => ({
         date: new Date(),
         timeStart: new Date(),
         timeEnd: new Date((new Date()).getTime() + (60 * (60 * 1000))),
@@ -144,35 +144,44 @@ class CreateMeetingContainer extends Component {
 
       if (freeRooms.length === 0) { // If all rooms for time interval currently is busy
         const hashMap = {};
-        const roomsAvailableViaSwap = roomsWithSufficientCapacity.filter((room, i, rooms) =>
+        const roomsAvailableViaSwap = roomsWithSufficientCapacity.filter(room =>
           room.events.filter(event => !((date.start > new Date(event.dateEnd).getTime()) ||
-         (date.end < new Date(event.dateStart).getTime())))
-            .reduce((acc, event) => {
-              const _start = new Date(event.dateStart).getTime();
-              const _end = new Date(event.dateEnd).getTime();
-              const usersCount = event.users.length;
+         (date.end < new Date(event.dateStart).getTime()))).reduce((acc, event) => {
+            const _start = new Date(event.dateStart).getTime();
+            const _end = new Date(event.dateEnd).getTime();
+            const usersCount = event.users.length;
 
-              const targetsForSwap = rooms.filter(_room =>
-                _room.capacity >= usersCount).filter(_room =>
-                _room.events.reduce((_acc, _event) => {
-                  const _roomEventStart = new Date(_event.dateStart).getTime();
-                  const _roomEventEnd = new Date(_event.dateEnd).getTime();
-                  if ((_start > _roomEventEnd) || (_end < _roomEventStart)) {
-                    return _acc;
-                  }
-                  return false;
-                }, true));
+            const targetsWithOkCapacity = db.rooms.filter(target => target.capacity >= usersCount);
+            const targetsForSwap = targetsWithOkCapacity.filter((_room) => {
+              if (this.props.stage.payload.purpose === 'edit') {
+                if (this.props.stage.payload.body.room.id === _room.id) {
+                  return true;
+                }
+              }
 
-              const optimizedSwapsList = targetsForSwap.sort((first, second) =>
-                (this.countFloorSteps(first, event.users) >
+              return _room.events.reduce((_acc, _event) => {
+                const _roomEventStart = new Date(_event.dateStart).getTime();
+                const _roomEventEnd = new Date(_event.dateEnd).getTime();
+
+                if ((_start > _roomEventEnd) || (_end < _roomEventStart)) {
+                  return _acc;
+                }
+
+                return false;
+              }, true);
+            });
+
+            const optimizedSwapsList = targetsForSwap.sort((first, second) =>
+              (this.countFloorSteps(first, event.users) >
                 this.countFloorSteps(second, event.users) ? 1 : -1));
 
-              if (optimizedSwapsList.length !== 0) {
-                hashMap[room.id] = { roomId: optimizedSwapsList[0].id, eventId: event.id };
-                return acc;
-              }
-              return false;
-            }, true)).map((room) => {
+            if (optimizedSwapsList.length !== 0) {
+              hashMap[room.id] = { roomId: optimizedSwapsList[0].id, eventId: event.id };
+              return acc;
+            }
+
+            return false;
+          }, true)).map((room) => {
           Object.assign(room, { swap: { ...hashMap[room.id] } });
           return room;
         });
@@ -191,6 +200,7 @@ class CreateMeetingContainer extends Component {
         }
       } else {
         let sortedRooms = [];
+
         if (members) {
           sortedRooms = freeRooms.sort((first, second) =>
             (this.countFloorSteps(first, members) >
@@ -206,6 +216,7 @@ class CreateMeetingContainer extends Component {
     }
 
     let newSelected = false;
+
     if (withoutSwaps && this.state.selectedRoom) {
       [newSelected] = recommendations.filter(recommendation =>
         recommendation.room.id === this.state.selectedRoom.room.id);
@@ -383,10 +394,8 @@ class CreateMeetingContainer extends Component {
         return { selectedRoom };
       }, () => {
         if (this.props.stage.payload.purpose === 'edit') {
-          console.log('swapConfirmedToEditing');
           this.acceptEventEditing();
         } else {
-          console.log('swapConfirmingTocreating');
           this.acceptCreating();
         }
       });
@@ -477,7 +486,6 @@ class CreateMeetingContainer extends Component {
           this.showSwapConfirmationModal(res.data);
         });
       } else if (selectedRoom && theme && !selectedRoom.swap) {
-        console.log('updateMutation');
         const variables = {
           input: {
             title: theme,
@@ -525,8 +533,8 @@ class CreateMeetingContainer extends Component {
     this.setState(() => ({ userSearchInput: value }), () => {
       const filtered = this.state.users
         .filter(user => user.login.match(new RegExp(value, 'i')))
-        .filter(matched => this.state.selectedUsers
-          .filter(selected => selected.id === matched.id).length === 0)
+        .filter(matched => this.state.selectedUsers.filter(selected =>
+          selected.id === matched.id).length === 0)
         .sort((a, b) => (a.login > b.login ? 1 : -1));
 
       this.setState({ filteredUsers: filtered });

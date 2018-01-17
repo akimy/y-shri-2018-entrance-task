@@ -107,7 +107,7 @@ class WorkplaceContainer extends Component {
               if (!acc) {
                 return acc;
               }
-              const temp2 = currentEvents.reduce((_acc, event) => {
+              const eventIntersected = currentEvents.reduce((_acc, event) => {
                 const roomEventStart = new Date(event.dateStart).getTime();
                 const roomEventEnd = new Date(event.dateEnd).getTime();
                 if (!((el > roomEventEnd) || ((el + 1000 * 60 * 60) < roomEventStart))) {
@@ -116,7 +116,8 @@ class WorkplaceContainer extends Component {
                 }
                 return _acc;
               }, false);
-              return temp2;
+
+              return eventIntersected;
             }, true);
           }
 
