@@ -4,7 +4,7 @@ import fetch from '../shared/apolloFetch';
 import Workplace from '../components/Workplace';
 
 class WorkplaceContainer extends Component {
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       floors: [],
@@ -12,6 +12,7 @@ class WorkplaceContainer extends Component {
       hoveredRoomId: null,
     };
 
+    this.calculateDays = this.calculateDays.bind(this);
     this.mapFadedRooms = this.mapFadedRooms.bind(this);
     this.setCalendarDate = this.setCalendarDate.bind(this);
     this.handleTimelineClick = this.handleTimelineClick.bind(this);
@@ -64,29 +65,44 @@ class WorkplaceContainer extends Component {
     });
   }
 
+  /** Function for translate Date object to count of the days
+   * @argument {Date} date dateObject
+   * @returns {Number} count of days
+  */
+  calculateDays(date) {
+    return (date.getDate() + date.getMonth() + date.getFullYear());
+  }
+
+  /** Function function that fade the room label
+   * @argument {Object} rooms rooms with associated events
+   * @returns {Promise} rooms list with bool property 'faded'
+   */
   mapFadedRooms(rooms) {
     const { calendarDate } = this.state;
     const currentDate = new Date();
+
     return new Promise((resolve) => {
-      const roomWithFaded = rooms.map((room) => {
-        if ((calendarDate.getDate() + calendarDate.getMonth() + calendarDate.getFullYear()) <
-         (currentDate.getDate() + currentDate.getMonth() + currentDate.getFullYear())) {
+      const roomsWithFaded = rooms.map((room) => {
+        if (this.calculateDays(calendarDate) < this.calculateDays(currentDate)) {
           Object.assign(room, { faded: true });
-        } else if ((calendarDate.getDate() + calendarDate.getMonth() + calendarDate.getFullYear()) ===
-        (currentDate.getDate() + currentDate.getMonth() + currentDate.getFullYear())) {
+        } else if (this.calculateDays(calendarDate) === this.calculateDays(currentDate)) {
           const currentEvents = room.events.filter((event) => {
             const roomEventStart = new Date(event.dateStart).getTime();
             const roomEventEnd = new Date(event.dateEnd).getTime();
-            return !((new Date().getTime() > roomEventEnd) || (new Date(new Date().setHours(23)).getTime() < roomEventStart));
+            return !((new Date().getTime() > roomEventEnd) ||
+            (new Date(new Date().setHours(23)).getTime() < roomEventStart));
           });
+
           let faded = false;
           let cur = new Date().getTime() + 1000 * 60 * 5;
           const curArr = [];
+
           if (currentEvents.length) {
             while (cur < new Date(new Date().setHours(23)).getTime()) {
               curArr.push(cur);
               cur += 1000 * 60 * 60;
             }
+
             faded = curArr.reduce((acc, el) => {
               if (!acc) {
                 return acc;
@@ -103,16 +119,22 @@ class WorkplaceContainer extends Component {
               return temp2;
             }, true);
           }
+
           Object.assign(room, { faded });
         } else {
           Object.assign(room, { faded: false });
         }
         return room;
       });
-      resolve(roomWithFaded);
+
+      resolve(roomsWithFaded);
     });
   }
 
+  /**
+   * Function for transform data structure from rooms list to floors with nested relative rooms
+   * @param {rooms[]} roomsWithoutFaded rooms list from CWM lifecycle method
+   */
   morphRoomsToFloorsArray(roomsWithoutFaded) {
     this.mapFadedRooms(roomsWithoutFaded).then((rooms) => {
       const roomsSorted = rooms.sort((first, second) =>
@@ -169,6 +191,7 @@ class WorkplaceContainer extends Component {
       this.morphRoomsToFloorsArray(this.state.rooms);
     });
   }
+
   handleCalendarRightArrowClick() {
     this.setState(state => ({
       calendarDate: new Date((state.calendarDate).getTime()
