@@ -82,10 +82,12 @@ class CreateMeetingContainer extends Component {
         this.tryToGetRecommendation();
       });
     } else if (purpose === 'createNew') {
-      this.setState({
+      this.setState((state, props) => ({
         date: new Date(),
         timeStart: new Date(),
         timeEnd: new Date((new Date()).getTime() + (60 * (60 * 1000))),
+      }), () => {
+        this.tryToGetRecommendation();
       });
     } else if (purpose === 'edit') {
       this.setState({
@@ -399,62 +401,10 @@ class CreateMeetingContainer extends Component {
 
   acceptCreating() {
     const { selectedRoom, theme, selectedUsers } = this.state;
-    if (selectedRoom.swap) {
-      fetch({
-        query: `{
-          event(id:${selectedRoom.swap.eventId}) {
-            title
-            users {
-              login
-            }
-            room {
-              title
-            }
-          }
-          room(id:${selectedRoom.swap.roomId}) {
-            title
-          }
-        }`,
-      }).then((res) => {
-        this.showSwapConfirmationModal(res.data);
-      });
-    } else if (selectedRoom && theme && !selectedRoom.swap) {
-      const usersIds = selectedUsers.map(el => Number(el.id));
-      const roomId = Number(selectedRoom.room.id);
-      const variables = {
-        input: {
-          title: theme,
-          dateStart: new Date(selectedRoom.date.start),
-          dateEnd: new Date(selectedRoom.date.end),
-        },
-        usersIds,
-        roomId,
-      };
-      fetch({
-        query: `
-          mutation CreateEvent($input:EventInput!, $usersIds:[ID], $roomId:ID!) {
-            createEvent(input:$input, usersIds:$usersIds, roomId:$roomId) {
-              dateStart
-              dateEnd
-              room {
-                title
-                floor
-              }
-            }
-          }`,
-        variables,
-      }).then((res) => {
-        this.props.setModalCreatedContent(res.data);
-        this.props.changeStageTo('workplace', '');
-      });
-    }
-  }
-
-  acceptEventEditing() {
-    const { selectedRoom, theme } = this.state;
-    if (selectedRoom.swap) {
-      fetch({
-        query: `{
+    if (selectedRoom) {
+      if (selectedRoom.swap) {
+        fetch({
+          query: `{
             event(id:${selectedRoom.swap.eventId}) {
               title
               users {
@@ -468,41 +418,97 @@ class CreateMeetingContainer extends Component {
               title
             }
           }`,
-      }).then((res) => {
-        this.showSwapConfirmationModal(res.data);
-      });
-    } else if (selectedRoom && theme && !selectedRoom.swap) {
-      console.log('updateMutation');
-      const variables = {
-        input: {
-          title: theme,
-          dateStart: new Date(selectedRoom.date.start),
-          dateEnd: new Date(selectedRoom.date.end),
-        },
-        id: this.props.stage.payload.body.id,
-        usersIds: this.state.selectedUsers.map(u => u.id),
-        roomId: this.state.selectedRoom.room.id,
-      };
-      fetch({
-        query: `
-          mutation updateEvent($id:ID!,$input:EventInput!,$usersIds:[ID],$roomId:ID!) {
-            updateEvent(id:$id,input:$input,usersIds:$usersIds,roomId:$roomId){
-              id
-              title
-              dateStart
-              dateEnd
-              users {
-                id
+        }).then((res) => {
+          this.showSwapConfirmationModal(res.data);
+        });
+      } else if (selectedRoom && theme && !selectedRoom.swap) {
+        const usersIds = selectedUsers.map(el => Number(el.id));
+        const roomId = Number(selectedRoom.room.id);
+        const variables = {
+          input: {
+            title: theme,
+            dateStart: new Date(selectedRoom.date.start),
+            dateEnd: new Date(selectedRoom.date.end),
+          },
+          usersIds,
+          roomId,
+        };
+        fetch({
+          query: `
+            mutation CreateEvent($input:EventInput!, $usersIds:[ID], $roomId:ID!) {
+              createEvent(input:$input, usersIds:$usersIds, roomId:$roomId) {
+                dateStart
+                dateEnd
+                room {
+                  title
+                  floor
+                }
               }
-              room {
-                id
+            }`,
+          variables,
+        }).then((res) => {
+          this.props.setModalCreatedContent(res.data);
+          this.props.changeStageTo('workplace', '');
+        });
+      }
+    }
+  }
+
+  acceptEventEditing() {
+    const { selectedRoom, theme } = this.state;
+    if (selectedRoom) {
+      if (selectedRoom.swap) {
+        fetch({
+          query: `{
+              event(id:${selectedRoom.swap.eventId}) {
+                title
+                users {
+                  login
+                }
+                room {
+                  title
+                }
               }
-            }
-          }`,
-        variables,
-      }).then(() => {
-        this.props.changeStageTo('workplace', '');
-      });
+              room(id:${selectedRoom.swap.roomId}) {
+                title
+              }
+            }`,
+        }).then((res) => {
+          this.showSwapConfirmationModal(res.data);
+        });
+      } else if (selectedRoom && theme && !selectedRoom.swap) {
+        console.log('updateMutation');
+        const variables = {
+          input: {
+            title: theme,
+            dateStart: new Date(selectedRoom.date.start),
+            dateEnd: new Date(selectedRoom.date.end),
+          },
+          id: this.props.stage.payload.body.id,
+          usersIds: this.state.selectedUsers.map(u => u.id),
+          roomId: this.state.selectedRoom.room.id,
+        };
+        fetch({
+          query: `
+            mutation updateEvent($id:ID!,$input:EventInput!,$usersIds:[ID],$roomId:ID!) {
+              updateEvent(id:$id,input:$input,usersIds:$usersIds,roomId:$roomId){
+                id
+                title
+                dateStart
+                dateEnd
+                users {
+                  id
+                }
+                room {
+                  id
+                }
+              }
+            }`,
+          variables,
+        }).then(() => {
+          this.props.changeStageTo('workplace', '');
+        });
+      }
     }
   }
 
