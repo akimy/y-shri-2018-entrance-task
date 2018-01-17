@@ -44,7 +44,8 @@ class DatePick extends Component {
                 <DatePicker
                   ref={ref => this.datePickerRef = ref}
                   defaultDate={this.props.dateStart}
-                  minDate={new Date('Sun Jan 14 2018 19:47:14 GMT+0500 (+05)')}
+                  minDate={new Date()}
+                  maxDate={new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30 * 1.5)}
                   onChange={(invalid, date) => { this.props.setDate(date); }}
                   mode="portrait"
                   locale="ru-RU"

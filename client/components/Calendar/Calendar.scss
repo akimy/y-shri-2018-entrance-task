@@ -14,7 +14,8 @@
     background-color: $faded;
     border-radius: 100px;
     height: 24px;
-    width: 24px;
+    max-width: 25px;
+    min-width: 24px;
     cursor: pointer;
     &:hover .calendar__icon {
         opacity: 1;
@@ -56,7 +57,6 @@
 //media
 @media all and (max-width: 750px) {
     .calendar__icon-wrapper {
-        width: 34px;
         margin-right: 10px;
         margin-left: 10px;
     }
