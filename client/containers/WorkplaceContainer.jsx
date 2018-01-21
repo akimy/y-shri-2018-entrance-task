@@ -70,7 +70,7 @@ class WorkplaceContainer extends Component {
    * @returns {Number} count of days
   */
   calculateDays(date) {
-    return (date.getDate() + date.getMonth() + date.getFullYear());
+    return (date.getDate() + date.getMonth() * 31 + date.getFullYear()) * 365;
   }
 
   /** Function function that fade the room label
