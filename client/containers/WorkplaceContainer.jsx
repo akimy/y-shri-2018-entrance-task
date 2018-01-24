@@ -90,17 +90,20 @@ class WorkplaceContainer extends Component {
             const roomEventStart = new Date(event.dateStart).getTime();
             const roomEventEnd = new Date(event.dateEnd).getTime();
             return !((new Date().getTime() > roomEventEnd) ||
-            (new Date(new Date().setHours(23)).getTime() < roomEventStart));
+            (new Date(new Date().setHours(23, 0)).getTime() < roomEventStart));
           });
 
           let faded = false;
           let cur = new Date().getTime() + 1000 * 60 * 5;
+          if (cur < new Date().setHours(8, 0)) {
+            cur = new Date().setHours(8, 0);
+          }
           const curArr = [];
 
           if (currentEvents.length) {
-            while (cur < new Date(new Date().setHours(23)).getTime()) {
+            while (cur < new Date(new Date().setHours(23, 0)).getTime()) {
               curArr.push(cur);
-              cur += 1000 * 60 * 60;
+              cur += 1000 * 60 * 15;
             }
 
             faded = curArr.reduce((acc, el) => {

@@ -319,9 +319,7 @@ class CreateMeetingContainer extends Component {
         }`,
       }).then((db) => {
         let timestampDate = date;
-        timestampDate.setHours(0);
-        timestampDate.setMinutes(0);
-        timestampDate.setSeconds(0);
+        timestampDate.setHours(0, 0, 0);
         timestampDate = timestampDate.getTime();
 
         let timestampStart = new Date(timeStart);
