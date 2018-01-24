@@ -113,7 +113,7 @@ class WorkplaceContainer extends Component {
               const eventIntersected = currentEvents.reduce((_acc, event) => {
                 const roomEventStart = new Date(event.dateStart).getTime();
                 const roomEventEnd = new Date(event.dateEnd).getTime();
-                if (!((el > roomEventEnd) || ((el + 1000 * 60 * 60) < roomEventStart))) {
+                if (!((el > roomEventEnd) || ((el + 1000 * 60 * 15) < roomEventStart))) {
                   //  Segment intersection appear!
                   return true;
                 }
