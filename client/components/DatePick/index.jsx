@@ -47,7 +47,7 @@ class DatePick extends Component {
                   minDate={new Date()}
                   maxDate={new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30 * 1.5)}
                   onChange={(invalid, date) => { this.props.setDate(date); }}
-                  mode="portrait"
+                  mode={window.innerWidth < 900 ? 'portrait' : 'landscape'}
                   locale="ru-RU"
                   DateTimeFormat={DateTimeFormat}
                   cancelLabel="Отмена"

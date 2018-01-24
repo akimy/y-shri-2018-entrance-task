@@ -45,3 +45,9 @@
         color: #b4b7b9;
     }
 }
+
+@media all and (max-width: 750px) {
+    %button {
+        height: 44px;
+    }
+}

@@ -18,7 +18,11 @@ const config = {
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
-            use: [{loader:'css-loader', options: { minimize: inProduction }}, 'sass-loader'],
+            use: [
+            {loader:'css-loader', options: { minimize: inProduction }},
+            'postcss-loader',
+            'sass-loader',
+          ],
             publicPath: '/public',
           })
       },
