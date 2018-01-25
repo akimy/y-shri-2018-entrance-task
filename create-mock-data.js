@@ -69,7 +69,6 @@ function createData() {
 
   const HOUR = 60 * 60 * 1000;
   const now = new Date();
-  const oneHourBefore = new Date(now.getTime() - HOUR);
   const oneHourLater = new Date(now.getTime() + HOUR);
   const twoHoursLater = new Date(oneHourLater.getTime() + HOUR);
   const threeHoursLater = new Date(twoHoursLater.getTime() + HOUR);
@@ -93,7 +92,7 @@ function createData() {
     },
     {
       title: 'Звездные разборки',
-      dateStart: oneHourBefore,
+      dateStart: oneHourLater,
       dateEnd: fiveHoursLater,
     },
   ]);
