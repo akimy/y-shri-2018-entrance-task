@@ -408,7 +408,7 @@ class CreateMeetingContainer extends Component {
 
   acceptCreating() {
     const { selectedRoom, theme, selectedUsers } = this.state;
-    if (selectedRoom) {
+    if (selectedRoom && selectedUsers.length && theme) {
       if (selectedRoom.swap) {
         fetch({
           query: `{
@@ -462,8 +462,8 @@ class CreateMeetingContainer extends Component {
   }
 
   acceptEventEditing() {
-    const { selectedRoom, theme } = this.state;
-    if (selectedRoom) {
+    const { selectedRoom, theme, selectedUsers } = this.state;
+    if (selectedRoom && theme && selectedUsers.length) {
       if (selectedRoom.swap) {
         fetch({
           query: `{
