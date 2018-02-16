@@ -133,7 +133,6 @@ const InteractiveArea = ({ floors, ...props }) => {
                   width="100%"
                   className="timeline__empty-track"
                   onMouseMove={(e) => {
-                    console.log();
                     if (getPermissionForCreateEvent(currentDate, pointStatus, e.clientX)) {
                       if (e.target.style.cursor !== 'none') {
                         e.target.style.cursor = 'none';
