@@ -8,7 +8,7 @@
 
 1. Скачайте себе репозиторий
 ```
-git clone https://github.com/ArVaganov/y-shri-2018-entrance-task.git
+git clone https://github.com/akimy/y-shri-2018-entrance-task.git
 ```
 2. Установите все зависимости.
 ```
