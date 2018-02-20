@@ -113,8 +113,8 @@ apollo-fetch - это очень удобная клиентская библи�
 
 Ссылка на предыдущее задание (API GraphQL):  
 
-https://github.com/ArVaganov/y-shri-2018-entrance-task/tree/Server
+https://github.com/akimy/y-shri-2018-entrance-task/tree/Server
 
 Ссылка на второе задание:  
 
-https://github.com/ArVaganov/y-shri-2018-entrance-task/tree/Layout
+https://github.com/akimy/y-shri-2018-entrance-task/tree/Layout
