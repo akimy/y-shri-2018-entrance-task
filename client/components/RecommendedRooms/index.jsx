@@ -34,7 +34,7 @@ const RecommendedRooms = (props) => {
       <span className="recommended-rooms__time">
         {getDateString(recommendation.date.start, recommendation.date.end)}
       </span>
-      <span className="recommended-rooms__name-floor">{`${recommendation.room.title} ⸱ ${recommendation.room.floor} этаж`}</span>
+      <span className="recommended-rooms__name-floor">{`${recommendation.room.title} · ${recommendation.room.floor} этаж`}</span>
       {recommendation.room.swap &&
       <img
         className="recommended-rooms__swap-icon"

@@ -17,7 +17,7 @@ const SelectedRoom = (props) => {
       </div>
       <div className="selected-room__tile">
         <span className="selected-room__time">{dateString}</span>
-        <span className="selected-room__name-floor">{`${props.title} ⸱ ${props.floor} этаж`}</span>
+        <span className="selected-room__name-floor">{`${props.title} · ${props.floor} этаж`}</span>
         <div
           role="button"
           tabIndex="0"

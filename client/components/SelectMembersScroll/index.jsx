@@ -25,7 +25,7 @@ const SelectMembersScroll = ({ members, addUserToSelected, ...props }) => {
       }}
     >
       <img className="select-scroll__avatar" src={member.avatarUrl} alt={`Изображение пользователя ${member.login}`} />
-      <span className="select-scroll__login">{`${member.login} ⸱`}</span>
+      <span className="select-scroll__login">{`${member.login} ·`}</span>
       <span className="select-scroll__floor">{`${member.homeFloor} этаж`}</span>
     </div>
   ));
